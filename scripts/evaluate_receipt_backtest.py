@@ -10,6 +10,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from vcscout.governance import select_production_candidate  # noqa: E402
 from vcscout.scoring import score_startups  # noqa: E402
 
 DATA = ROOT / "data" / "training" / "receipt_backtest_features.csv"
@@ -31,6 +32,17 @@ EXPANDED_FEATURES = BASE_FEATURES + [
     "prs_merged_30d",
     "community_throughput_30d",
 ]
+
+# The live Pattern Index currently computes only the engineering-derived features below.
+LIVE_SUPPORTED_FEATURES = {
+    "log_commit_velocity",
+    "commit_velocity_change",
+    "log_contributors",
+    "contributor_growth",
+    "velocity_positive",
+    "growth_positive",
+    "dual_acceleration",
+}
 
 
 def _prepare_features(frame: pd.DataFrame, expanded: bool) -> pd.DataFrame:
@@ -141,11 +153,51 @@ def _evaluate(x: pd.DataFrame, y: np.ndarray, groups: np.ndarray) -> tuple[np.nd
     return oof, metrics
 
 
-def main() -> None:
+def _load_incumbent() -> dict | None:
+    if not RANKER.exists():
+        return None
+    try:
+        artifact = json.loads(RANKER.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if artifact.get("artifact_type") != "historical_case_control_ranker":
+        return None
+    return artifact
+
+
+def _fit_artifact(x: pd.DataFrame, y: np.ndarray, metrics: dict, name: str, version: int) -> dict:
     from sklearn.linear_model import LogisticRegression
-    from sklearn.metrics import average_precision_score, roc_auc_score
     from sklearn.pipeline import Pipeline
     from sklearn.preprocessing import StandardScaler
+
+    model = Pipeline([
+        ("scale", StandardScaler()),
+        ("model", LogisticRegression(C=0.35, max_iter=2000, class_weight="balanced", random_state=42)),
+    ])
+    model.fit(x, y)
+    scaler = model.named_steps["scale"]
+    logistic = model.named_steps["model"]
+    return {
+        "artifact_type": "historical_case_control_ranker",
+        "version": version,
+        "model_name": name,
+        "feature_names": list(x.columns),
+        "feature_mean": [float(v) for v in scaler.mean_],
+        "feature_scale": [float(v) for v in scaler.scale_],
+        "coefficients": [float(v) for v in logistic.coef_[0]],
+        "intercept": float(logistic.intercept_[0]),
+        "training_rows": int(len(y)),
+        "validation_roc_auc": metrics["roc_auc"],
+        "validation_average_precision": metrics["average_precision"],
+        "validation_auc_95_ci": metrics["roc_auc_95_ci"],
+        "probability_calibrated": False,
+        "selection_note": "Promoted automatically only after clearing material lift and live-feature compatibility gates.",
+        "output_semantics": "Use for ranking only; convert to a percentile within the current candidate universe. Do not present it as funding probability.",
+    }
+
+
+def main() -> None:
+    from sklearn.metrics import average_precision_score, roc_auc_score
 
     frame = pd.read_csv(DATA)
     required = set(EXPANDED_FEATURES + ["raised_funding_within_90d", "github_owner", "signal_type"])
@@ -184,32 +236,36 @@ def main() -> None:
     PREDICTIONS.parent.mkdir(parents=True, exist_ok=True)
     output.to_csv(PREDICTIONS, index=False)
 
-    final_model = Pipeline([
-        ("scale", StandardScaler()),
-        ("model", LogisticRegression(C=0.35, max_iter=2000, class_weight="balanced", random_state=42)),
-    ])
-    final_model.fit(x_expanded, y)
-    scaler = final_model.named_steps["scale"]
-    logistic = final_model.named_steps["model"]
-    ranker_artifact = {
-        "artifact_type": "historical_case_control_ranker",
-        "version": 2,
-        "feature_names": list(x_expanded.columns),
-        "feature_mean": [float(v) for v in scaler.mean_],
-        "feature_scale": [float(v) for v in scaler.scale_],
-        "coefficients": [float(v) for v in logistic.coef_[0]],
-        "intercept": float(logistic.intercept_[0]),
-        "training_rows": int(len(frame)),
-        "training_companies": int(pd.Series(groups).nunique()),
-        "validation_roc_auc": expanded_metrics["roc_auc"],
-        "validation_average_precision": expanded_metrics["average_precision"],
-        "validation_auc_95_ci": expanded_metrics["roc_auc_95_ci"],
-        "engineering_only_validation": base_metrics,
-        "probability_calibrated": False,
-        "output_semantics": "Use for ranking only; convert to a percentile within the current candidate universe. Do not present it as funding probability.",
+    incumbent = _load_incumbent()
+    incumbent_metrics = None
+    incumbent_version = 0
+    if incumbent:
+        incumbent_metrics = {
+            "roc_auc": incumbent.get("validation_roc_auc"),
+            "average_precision": incumbent.get("validation_average_precision"),
+        }
+        incumbent_version = int(incumbent.get("version") or 0)
+
+    candidates = {
+        "engineering_only": {
+            "metrics": base_metrics,
+            "live_compatible": set(x_base.columns).issubset(LIVE_SUPPORTED_FEATURES),
+        },
+        "engineering_product_community": {
+            "metrics": expanded_metrics,
+            "live_compatible": set(x_expanded.columns).issubset(LIVE_SUPPORTED_FEATURES),
+        },
     }
-    RANKER.parent.mkdir(parents=True, exist_ok=True)
-    RANKER.write_text(json.dumps(ranker_artifact, indent=2))
+    selection = select_production_candidate(incumbent_metrics, candidates)
+
+    if selection["promote"]:
+        selected = selection["selected_model"]
+        selected_x = x_base if selected == "engineering_only" else x_expanded
+        selected_metrics = base_metrics if selected == "engineering_only" else expanded_metrics
+        artifact = _fit_artifact(selected_x, y, selected_metrics, selected, incumbent_version + 1)
+        artifact["training_companies"] = int(pd.Series(groups).nunique())
+        RANKER.parent.mkdir(parents=True, exist_ok=True)
+        RANKER.write_text(json.dumps(artifact, indent=2))
 
     report = {
         "status": "completed",
@@ -228,9 +284,10 @@ def main() -> None:
             "roc_auc": round(scout_auc, 4),
             "average_precision": round(scout_ap, 4),
         },
+        "model_selection": selection,
         "paired_signal_summary": _paired_summary(frame),
-        "historical_pattern_ranker_exported": True,
-        "ranker_version": 2,
+        "historical_pattern_ranker_available": RANKER.exists(),
+        "production_ranker_action": "promoted_challenger" if selection["promote"] else "retained_incumbent",
         "probability_calibrated": False,
         "production_probability_eligible": False,
         "caveats": [
