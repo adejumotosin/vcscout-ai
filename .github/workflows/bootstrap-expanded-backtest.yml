@@ -12,7 +12,7 @@ permissions:
 jobs:
   benchmark:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,4 +39,5 @@ jobs:
                   data/model/funding_pattern_ranker.json \
                   data/workflow_status/receipt_backtest_build.csv
           git commit -m "data: benchmark expanded historical signal model" || true
+          git pull --rebase origin main
           git push
