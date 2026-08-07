@@ -1,0 +1,39 @@
+# Temporary one-shot archived commercial-signal pilot; remove after validation.
+name: Pilot archived commercial backtest
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/bootstrap-commercial-backtest.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  commercial-pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -e '.[dev]'
+      - name: Run tests
+        run: pytest -q
+      - name: Build 12-company archived commercial pilot
+        env:
+          GH_PUBLIC_TOKEN: ${{ github.token }}
+        run: python scripts/build_commercial_backtest.py --limit 12 --max-capture-age-days 120
+      - name: Commit pilot data and audit
+        run: |
+          git config user.name "vcscout-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/training/commercial_backtest_features.csv data/workflow_status/commercial_backtest_build.csv
+          git commit -m "data: pilot archived commercial signals" || true
+          git push
