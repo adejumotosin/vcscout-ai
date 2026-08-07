@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import os
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 from pathlib import Path
 from typing import Any
@@ -23,6 +23,7 @@ API = "https://api.github.com"
 class GitHubClient:
     token: str | None
     timeout: int = 45
+    _release_cache: dict[tuple[str, str], list[dict]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.session = requests.Session()
@@ -30,7 +31,7 @@ class GitHubClient:
             {
                 "Accept": "application/vnd.github+json",
                 "X-GitHub-Api-Version": "2022-11-28",
-                "User-Agent": "VCScoutAI/0.3 receipt-backtest",
+                "User-Agent": "VCScoutAI/0.4 historical-signal-backtest",
             }
         )
         if self.token:
@@ -70,6 +71,34 @@ class GitHubClient:
             time.sleep(0.03)
         return rows
 
+    def releases(self, owner: str, repo: str) -> list[dict]:
+        key = (owner.lower(), repo.lower())
+        if key in self._release_cache:
+            return self._release_cache[key]
+        rows: list[dict] = []
+        page = 1
+        while True:
+            response = self.get(
+                f"/repos/{owner}/{repo}/releases",
+                params={"per_page": 100, "page": page},
+            )
+            batch = response.json()
+            if not isinstance(batch, list):
+                raise RuntimeError(f"Unexpected release response for {owner}/{repo}")
+            rows.extend(batch)
+            if len(batch) < 100 or page >= 10:
+                break
+            page += 1
+            time.sleep(0.03)
+        self._release_cache[key] = rows
+        return rows
+
+    def search_count(self, query: str) -> int:
+        response = self.get("/search/issues", params={"q": query, "per_page": 1})
+        payload = response.json()
+        time.sleep(2.05)  # Search API has a much tighter authenticated rate limit than core REST.
+        return int(payload.get("total_count") or 0)
+
 
 def _identity(commit: dict) -> str:
     author = commit.get("author") or {}
@@ -82,6 +111,38 @@ def _identity(commit: dict) -> str:
         return f"email:{email}"
     name = (raw.get("name") or "unknown").strip().lower()
     return f"name:{name}"
+
+
+def _iso_day(value: pd.Timestamp) -> str:
+    return value.strftime("%Y-%m-%d")
+
+
+def _release_metrics(client: GitHubClient, owner: str, repo: str, end: pd.Timestamp) -> dict[str, float]:
+    releases = client.releases(owner, repo)
+    dates = []
+    for release in releases:
+        raw = release.get("published_at") or release.get("created_at")
+        dt = pd.to_datetime(raw, errors="coerce", utc=True)
+        if pd.notna(dt):
+            dates.append(pd.Timestamp(dt))
+    count_30 = sum(end - timedelta(days=30) <= dt <= end for dt in dates)
+    count_90 = sum(end - timedelta(days=90) <= dt <= end for dt in dates)
+    return {"releases_30d": float(count_30), "releases_90d": float(count_90)}
+
+
+def _community_metrics(client: GitHubClient, owner: str, repo: str, end: pd.Timestamp) -> dict[str, float]:
+    start = end - timedelta(days=30)
+    range_text = f"{_iso_day(start)}..{_iso_day(end)}"
+    base = f"repo:{owner}/{repo}"
+    issues_opened = client.search_count(f"{base} is:issue created:{range_text}")
+    issues_closed = client.search_count(f"{base} is:issue closed:{range_text}")
+    prs_merged = client.search_count(f"{base} is:pr is:merged merged:{range_text}")
+    return {
+        "issues_opened_30d": float(issues_opened),
+        "issues_closed_30d": float(issues_closed),
+        "prs_merged_30d": float(prs_merged),
+        "community_throughput_30d": float(issues_closed + prs_merged),
+    }
 
 
 def _period_metrics(client: GitHubClient, owner: str, repo: str, end: pd.Timestamp) -> dict[str, float]:
@@ -118,6 +179,8 @@ def _period_metrics(client: GitHubClient, owner: str, repo: str, end: pd.Timesta
         "contributor_growth": round(float(contributor_growth), 4),
         "new_repos_30d": 0.0,
         "signal_type": signal_type,
+        **_release_metrics(client, owner, repo, end),
+        **_community_metrics(client, owner, repo, end),
     }
 
 
@@ -126,8 +189,6 @@ def build(limit: int | None, token: str | None) -> tuple[pd.DataFrame, pd.DataFr
     receipts["event_date"] = pd.to_datetime(receipts["event_date"], errors="coerce", utc=True)
     receipts = receipts[receipts["event_date"].notna()].copy()
 
-    # Multiple repositories can represent the same company/funding event. Keep one repository
-    # per GitHub owner and event date so the event is not duplicated in the backtest.
     receipts = receipts.sort_values(["event_date", "github_owner", "github_repo"]).drop_duplicates(
         ["github_owner", "event_date"], keep="first"
     )
@@ -188,7 +249,7 @@ def build(limit: int | None, token: str | None) -> tuple[pd.DataFrame, pd.DataFr
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Reconstruct historical GitHub windows around validated funding receipts.")
+    parser = argparse.ArgumentParser(description="Reconstruct historical engineering and product/community windows around validated funding receipts.")
     parser.add_argument("--limit", type=int, default=None, help="Pilot limit on unique funding receipts")
     parser.add_argument("--token", default=os.environ.get("GH_PUBLIC_TOKEN") or os.environ.get("GITHUB_TOKEN"))
     args = parser.parse_args()
