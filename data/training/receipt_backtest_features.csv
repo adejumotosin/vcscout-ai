@@ -19,3 +19,79 @@ grafana,grafana,grafana,2022-04-13 00:00:00+00:00,2022-03-02 00:00:00+00:00,pre_
 grafana,grafana,grafana,2022-04-13 00:00:00+00:00,2021-10-15 00:00:00+00:00,control_180d,0,202.0,3.5897,75.0,15.3846,0.0,Framework migration
 BuilderIO,BuilderIO,builder,2022-04-19 00:00:00+00:00,2022-03-08 00:00:00+00:00,pre_funding_42d,1,150.0,-30.2326,7.0,75.0,0.0,Engineering hiring burst
 BuilderIO,BuilderIO,builder,2022-04-19 00:00:00+00:00,2021-10-21 00:00:00+00:00,control_180d,0,15.0,-11.7647,4.0,-20.0,0.0,Framework migration
+prisma,prisma,prisma,2022-04-26 00:00:00+00:00,2022-03-15 00:00:00+00:00,pre_funding_42d,1,0.0,0.0,0.0,0.0,0.0,Framework migration
+prisma,prisma,prisma,2022-04-26 00:00:00+00:00,2021-10-28 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+ToolJet,ToolJet,ToolJet,2022-05-18 00:00:00+00:00,2022-04-06 00:00:00+00:00,pre_funding_42d,1,71.0,10.9375,29.0,38.0952,0.0,Framework migration
+ToolJet,ToolJet,ToolJet,2022-05-18 00:00:00+00:00,2021-11-19 00:00:00+00:00,control_180d,0,48.0,-40.7407,7.0,-80.5556,0.0,Framework migration
+denoland,denoland,deno,2022-06-21 00:00:00+00:00,2022-05-10 00:00:00+00:00,pre_funding_42d,1,43.0,-33.8462,17.0,0.0,0.0,Framework migration
+denoland,denoland,deno,2022-06-21 00:00:00+00:00,2021-12-23 00:00:00+00:00,control_180d,0,74.0,68.1818,17.0,-5.5556,0.0,Framework migration
+getsentry,getsentry,sentry,2022-07-12 00:00:00+00:00,2022-05-31 00:00:00+00:00,pre_funding_42d,1,308.0,-22.6131,52.0,0.0,0.0,Framework migration
+getsentry,getsentry,sentry,2022-07-12 00:00:00+00:00,2022-01-13 00:00:00+00:00,control_180d,0,198.0,69.2308,33.0,13.7931,0.0,Framework migration
+linear,linear,linear,2022-07-26 00:00:00+00:00,2022-06-14 00:00:00+00:00,pre_funding_42d,1,0.0,0.0,0.0,0.0,0.0,Framework migration
+linear,linear,linear,2022-07-26 00:00:00+00:00,2022-01-27 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+oven-sh,oven-sh,bun,2022-08-08 00:00:00+00:00,2022-06-27 00:00:00+00:00,pre_funding_42d,1,81.0,153.125,2.0,0.0,0.0,Deploy frequency spike
+oven-sh,oven-sh,bun,2022-08-08 00:00:00+00:00,2022-02-09 00:00:00+00:00,control_180d,0,112.0,41.7722,2.0,100.0,0.0,Engineering hiring burst
+dagster-io,dagster-io,dagster,2022-08-09 00:00:00+00:00,2022-06-28 00:00:00+00:00,pre_funding_42d,1,117.0,-42.9268,21.0,-12.5,0.0,Framework migration
+dagster-io,dagster-io,dagster,2022-08-09 00:00:00+00:00,2022-02-10 00:00:00+00:00,control_180d,0,103.0,1.9802,18.0,-14.2857,0.0,Framework migration
+appsmithorg,appsmithorg,appsmith,2022-08-23 00:00:00+00:00,2022-07-12 00:00:00+00:00,pre_funding_42d,1,83.0,-45.7516,35.0,-5.4054,0.0,Framework migration
+appsmithorg,appsmithorg,appsmith,2022-08-23 00:00:00+00:00,2022-02-24 00:00:00+00:00,control_180d,0,125.0,-12.5874,42.0,-8.6957,0.0,Framework migration
+sanity-io,sanity-io,sanity,2022-09-13 00:00:00+00:00,2022-08-02 00:00:00+00:00,pre_funding_42d,1,19.0,-62.0,1.0,-83.3333,0.0,Framework migration
+sanity-io,sanity-io,sanity,2022-09-13 00:00:00+00:00,2022-03-17 00:00:00+00:00,control_180d,0,90.0,718.1818,8.0,14.2857,0.0,Deploy frequency spike
+withastro,withastro,astro,2022-10-13 00:00:00+00:00,2022-09-01 00:00:00+00:00,pre_funding_42d,1,148.0,-28.1553,41.0,2.5,0.0,Framework migration
+withastro,withastro,astro,2022-10-13 00:00:00+00:00,2022-04-16 00:00:00+00:00,control_180d,0,222.0,11.5578,14.0,-12.5,0.0,Framework migration
+CompVis,CompVis,stable-diffusion,2022-10-17 00:00:00+00:00,2022-09-05 00:00:00+00:00,pre_funding_42d,1,4.0,-73.3333,1.0,-83.3333,0.0,Framework migration
+CompVis,CompVis,stable-diffusion,2022-10-17 00:00:00+00:00,2022-04-20 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+triggerdotdev,triggerdotdev,trigger.dev,2023-03-01 00:00:00+00:00,2023-01-18 00:00:00+00:00,pre_funding_42d,1,363.0,95.1613,4.0,-20.0,0.0,Framework migration
+triggerdotdev,triggerdotdev,trigger.dev,2023-03-01 00:00:00+00:00,2022-09-02 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+inngest,inngest,inngest,2023-04-13 00:00:00+00:00,2023-03-02 00:00:00+00:00,pre_funding_42d,1,9.0,-86.1538,4.0,0.0,0.0,Framework migration
+inngest,inngest,inngest,2023-04-13 00:00:00+00:00,2022-10-15 00:00:00+00:00,control_180d,0,46.0,-40.2597,3.0,0.0,0.0,Framework migration
+weaviate,weaviate,weaviate,2023-04-19 00:00:00+00:00,2023-03-08 00:00:00+00:00,pre_funding_42d,1,180.0,28.5714,16.0,-5.8824,0.0,Framework migration
+weaviate,weaviate,weaviate,2023-04-19 00:00:00+00:00,2022-10-21 00:00:00+00:00,control_180d,0,98.0,-36.3636,10.0,0.0,0.0,Framework migration
+mage-ai,mage-ai,mage-ai,2023-04-25 00:00:00+00:00,2023-03-14 00:00:00+00:00,pre_funding_42d,1,126.0,0.8,10.0,66.6667,0.0,Engineering hiring burst
+mage-ai,mage-ai,mage-ai,2023-04-25 00:00:00+00:00,2022-10-27 00:00:00+00:00,control_180d,0,129.0,30.303,7.0,16.6667,0.0,Framework migration
+replit,replit,replit-py,2023-04-25 00:00:00+00:00,2023-03-14 00:00:00+00:00,pre_funding_42d,1,0.0,0.0,0.0,0.0,0.0,Framework migration
+replit,replit,replit-py,2023-04-25 00:00:00+00:00,2022-10-27 00:00:00+00:00,control_180d,0,1.0,999.0,1.0,999.0,0.0,Engineering hiring burst
+neondatabase,neondatabase,neon,2023-08-15 00:00:00+00:00,2023-07-04 00:00:00+00:00,pre_funding_42d,1,51.0,-16.3934,16.0,0.0,0.0,Framework migration
+neondatabase,neondatabase,neon,2023-08-15 00:00:00+00:00,2023-02-16 00:00:00+00:00,control_180d,0,49.0,-33.7838,15.0,-6.25,0.0,Framework migration
+huggingface,huggingface,diffusers,2023-08-24 00:00:00+00:00,2023-07-13 00:00:00+00:00,pre_funding_42d,1,64.0,72.973,27.0,28.5714,0.0,Framework migration
+huggingface,huggingface,diffusers,2023-08-24 00:00:00+00:00,2023-02-25 00:00:00+00:00,control_180d,0,80.0,23.0769,24.0,-14.2857,0.0,Framework migration
+mistralai,mistralai,mistral-src,2023-12-11 00:00:00+00:00,2023-10-30 00:00:00+00:00,pre_funding_42d,1,10.0,-41.1765,5.0,-16.6667,0.0,Framework migration
+mistralai,mistralai,mistral-src,2023-12-11 00:00:00+00:00,2023-06-14 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+qdrant,qdrant,qdrant,2024-01-23 00:00:00+00:00,2023-12-12 00:00:00+00:00,pre_funding_42d,1,231.0,999.0,18.0,999.0,0.0,Engineering hiring burst
+qdrant,qdrant,qdrant,2024-01-23 00:00:00+00:00,2023-07-27 00:00:00+00:00,control_180d,0,0.0,-100.0,0.0,-100.0,0.0,Framework migration
+tursodatabase,tursodatabase,libsql,2024-02-01 00:00:00+00:00,2023-12-21 00:00:00+00:00,pre_funding_42d,1,170.0,-45.8599,14.0,-6.6667,0.0,Framework migration
+tursodatabase,tursodatabase,libsql,2024-02-01 00:00:00+00:00,2023-08-05 00:00:00+00:00,control_180d,0,225.0,1.3514,12.0,20.0,0.0,Framework migration
+langchain-ai,langchain-ai,langchain,2024-02-15 00:00:00+00:00,2024-01-04 00:00:00+00:00,pre_funding_42d,1,209.0,-4.5662,98.0,38.0282,0.0,Framework migration
+langchain-ai,langchain-ai,langchain,2024-02-15 00:00:00+00:00,2023-08-19 00:00:00+00:00,control_180d,0,348.0,12.987,136.0,1.4925,0.0,Framework migration
+togethercomputer,togethercomputer,RedPajama-Data,2024-03-13 00:00:00+00:00,2024-01-31 00:00:00+00:00,pre_funding_42d,1,0.0,0.0,0.0,0.0,0.0,Framework migration
+togethercomputer,togethercomputer,RedPajama-Data,2024-03-13 00:00:00+00:00,2023-09-15 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+AppFlowy-IO,AppFlowy-IO,AppFlowy,2024-04-01 00:00:00+00:00,2024-02-19 00:00:00+00:00,pre_funding_42d,1,34.0,-54.6667,16.0,33.3333,0.0,Framework migration
+AppFlowy-IO,AppFlowy-IO,AppFlowy,2024-04-01 00:00:00+00:00,2023-10-04 00:00:00+00:00,control_180d,0,59.0,47.5,20.0,17.6471,0.0,Framework migration
+clerk,clerk,javascript,2024-04-09 00:00:00+00:00,2024-02-27 00:00:00+00:00,pre_funding_42d,1,68.0,-22.7273,11.0,-21.4286,0.0,Framework migration
+clerk,clerk,javascript,2024-04-09 00:00:00+00:00,2023-10-12 00:00:00+00:00,control_180d,0,110.0,74.6032,16.0,60.0,0.0,Engineering hiring burst
+supabase,supabase,supabase,2024-04-15 00:00:00+00:00,2024-03-04 00:00:00+00:00,pre_funding_42d,1,144.0,-2.7027,42.0,-26.3158,0.0,Framework migration
+supabase,supabase,supabase,2024-04-15 00:00:00+00:00,2023-10-18 00:00:00+00:00,control_180d,0,140.0,-21.3483,55.0,14.5833,0.0,Framework migration
+replicate,replicate,replicate-python,2024-04-22 00:00:00+00:00,2024-03-11 00:00:00+00:00,pre_funding_42d,1,1.0,-83.3333,1.0,-66.6667,0.0,Framework migration
+replicate,replicate,replicate-python,2024-04-22 00:00:00+00:00,2023-10-25 00:00:00+00:00,control_180d,0,0.0,-100.0,0.0,-100.0,0.0,Framework migration
+get-convex,get-convex,convex-backend,2024-04-30 00:00:00+00:00,2024-03-19 00:00:00+00:00,pre_funding_42d,1,116.0,999.0,15.0,999.0,0.0,Engineering hiring burst
+get-convex,get-convex,convex-backend,2024-04-30 00:00:00+00:00,2023-11-02 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+pinecone-io,pinecone-io,pinecone-python-client,2024-05-02 00:00:00+00:00,2024-03-21 00:00:00+00:00,pre_funding_42d,1,2.0,-60.0,2.0,-50.0,0.0,Framework migration
+pinecone-io,pinecone-io,pinecone-python-client,2024-05-02 00:00:00+00:00,2023-11-04 00:00:00+00:00,control_180d,0,6.0,-25.0,3.0,0.0,0.0,Framework migration
+vercel,vercel,ai,2024-05-16 00:00:00+00:00,2024-04-04 00:00:00+00:00,pre_funding_42d,1,28.0,12.0,9.0,12.5,0.0,Framework migration
+vercel,vercel,ai,2024-05-16 00:00:00+00:00,2023-11-18 00:00:00+00:00,control_180d,0,21.0,-8.6957,5.0,-28.5714,0.0,Framework migration
+BerriAI,BerriAI,litellm,2024-07-15 00:00:00+00:00,2024-06-03 00:00:00+00:00,pre_funding_42d,1,699.0,-13.597,25.0,-26.4706,0.0,Framework migration
+BerriAI,BerriAI,litellm,2024-07-15 00:00:00+00:00,2024-01-17 00:00:00+00:00,control_180d,0,564.0,39.604,15.0,-11.7647,0.0,Framework migration
+groq,groq,groq-python,2024-08-05 00:00:00+00:00,2024-06-24 00:00:00+00:00,pre_funding_42d,1,3.0,999.0,1.0,999.0,0.0,Engineering hiring burst
+groq,groq,groq-python,2024-08-05 00:00:00+00:00,2024-02-07 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+resend,resend,react-email,2024-08-13 00:00:00+00:00,2024-07-02 00:00:00+00:00,pre_funding_42d,1,11.0,1000.0,6.0,500.0,0.0,Engineering hiring burst
+resend,resend,react-email,2024-08-13 00:00:00+00:00,2024-02-15 00:00:00+00:00,control_180d,0,18.0,-76.3158,5.0,-58.3333,0.0,Framework migration
+modal-labs,modal-labs,modal-client,2024-09-04 00:00:00+00:00,2024-07-24 00:00:00+00:00,pre_funding_42d,1,75.0,-15.7303,12.0,-25.0,0.0,Framework migration
+modal-labs,modal-labs,modal-client,2024-09-04 00:00:00+00:00,2024-03-08 00:00:00+00:00,control_180d,0,166.0,29.6875,14.0,-12.5,0.0,Framework migration
+calcom,calcom,cal.com,2024-09-17 00:00:00+00:00,2024-08-06 00:00:00+00:00,pre_funding_42d,1,90.0,20.0,30.0,-11.7647,0.0,Framework migration
+calcom,calcom,cal.com,2024-09-17 00:00:00+00:00,2024-03-21 00:00:00+00:00,control_180d,0,97.0,-2.0202,25.0,-16.6667,0.0,Framework migration
+getcursor,getcursor,cursor,2024-12-19 00:00:00+00:00,2024-11-07 00:00:00+00:00,pre_funding_42d,1,0.0,-100.0,0.0,-100.0,0.0,Framework migration
+getcursor,getcursor,cursor,2024-12-19 00:00:00+00:00,2024-06-22 00:00:00+00:00,control_180d,0,0.0,0.0,0.0,0.0,0.0,Framework migration
+comfyanonymous,comfyanonymous,ComfyUI,2025-01-08 00:00:00+00:00,2024-11-27 00:00:00+00:00,pre_funding_42d,1,38.0,31.0345,6.0,-33.3333,0.0,Framework migration
+comfyanonymous,comfyanonymous,ComfyUI,2025-01-08 00:00:00+00:00,2024-07-12 00:00:00+00:00,control_180d,0,55.0,5.7692,13.0,30.0,0.0,Framework migration
+anthropics,anthropics,anthropic-sdk-python,2025-03-04 00:00:00+00:00,2025-01-21 00:00:00+00:00,pre_funding_42d,1,23.0,999.0,4.0,999.0,0.0,Engineering hiring burst
+anthropics,anthropics,anthropic-sdk-python,2025-03-04 00:00:00+00:00,2024-09-05 00:00:00+00:00,control_180d,0,3.0,-86.9565,2.0,-60.0,0.0,Framework migration
