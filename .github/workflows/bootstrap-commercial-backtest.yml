@@ -40,9 +40,8 @@ jobs:
         run: |
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/training/commercial_backtest_features.csv \
-                  data/workflow_status/commercial_backtest_build.csv \
-                  data/training/multimodal_backtest_predictions.csv \
-                  data/model/multimodal_backtest_report.json 2>/dev/null || true
+          git add data/training/commercial_backtest_features.csv data/workflow_status/commercial_backtest_build.csv
+          [ -f data/training/multimodal_backtest_predictions.csv ] && git add data/training/multimodal_backtest_predictions.csv || true
+          [ -f data/model/multimodal_backtest_report.json ] && git add data/model/multimodal_backtest_report.json || true
           git commit -m "data: pilot historical commercial validation" || true
           git push
