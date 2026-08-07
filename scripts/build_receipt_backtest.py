@@ -46,6 +46,32 @@ class GitHubClient:
         response.raise_for_status()
         return response
 
+    def graphql_search_counts(self, queries: dict[str, str]) -> dict[str, int]:
+        if not self.token:
+            raise RuntimeError("Authenticated GitHub token required for GraphQL historical counts")
+        fields = []
+        variables: dict[str, str] = {}
+        variable_defs = []
+        for i, (name, query) in enumerate(queries.items()):
+            variable = f"q{i}"
+            variable_defs.append(f"${variable}: String!")
+            fields.append(f'{name}: search(query: ${variable}, type: ISSUE, first: 1) {{ issueCount }}')
+            variables[variable] = query
+        document = f"query({', '.join(variable_defs)}) {{ {' '.join(fields)} }}"
+        response = self.session.post(
+            f"{API}/graphql",
+            json={"query": document, "variables": variables},
+            timeout=self.timeout,
+        )
+        if response.status_code in {403, 429}:
+            raise RuntimeError(f"GitHub GraphQL rate limited: {response.text[:300]}")
+        response.raise_for_status()
+        payload = response.json()
+        if payload.get("errors"):
+            raise RuntimeError(f"GitHub GraphQL search failed: {payload['errors'][:2]}")
+        data = payload.get("data") or {}
+        return {name: int((data.get(name) or {}).get("issueCount") or 0) for name in queries}
+
     def commits(self, owner: str, repo: str, since: pd.Timestamp, until: pd.Timestamp) -> list[dict]:
         rows: list[dict] = []
         page = 1
@@ -93,12 +119,6 @@ class GitHubClient:
         self._release_cache[key] = rows
         return rows
 
-    def search_count(self, query: str) -> int:
-        response = self.get("/search/issues", params={"q": query, "per_page": 1})
-        payload = response.json()
-        time.sleep(2.05)  # Search API has a much tighter authenticated rate limit than core REST.
-        return int(payload.get("total_count") or 0)
-
 
 def _identity(commit: dict) -> str:
     author = commit.get("author") or {}
@@ -134,9 +154,16 @@ def _community_metrics(client: GitHubClient, owner: str, repo: str, end: pd.Time
     start = end - timedelta(days=30)
     range_text = f"{_iso_day(start)}..{_iso_day(end)}"
     base = f"repo:{owner}/{repo}"
-    issues_opened = client.search_count(f"{base} is:issue created:{range_text}")
-    issues_closed = client.search_count(f"{base} is:issue closed:{range_text}")
-    prs_merged = client.search_count(f"{base} is:pr is:merged merged:{range_text}")
+    counts = client.graphql_search_counts(
+        {
+            "issuesOpened": f"{base} is:issue created:{range_text}",
+            "issuesClosed": f"{base} is:issue closed:{range_text}",
+            "prsMerged": f"{base} is:pr is:merged merged:{range_text}",
+        }
+    )
+    issues_opened = counts["issuesOpened"]
+    issues_closed = counts["issuesClosed"]
+    prs_merged = counts["prsMerged"]
     return {
         "issues_opened_30d": float(issues_opened),
         "issues_closed_30d": float(issues_closed),
