@@ -16,6 +16,7 @@ from vcscout.outcomes import normalize_company_name  # noqa: E402
 HISTORY = ROOT / "data" / "history" / "signals_history.csv"
 EVENTS = ROOT / "data" / "funding_events" / "sec_form_d_events.csv"
 OUTPUT = ROOT / "data" / "workflow_status" / "entity_match_audit.csv"
+HIGH_CONFIDENCE_OUTPUT = ROOT / "data" / "workflow_status" / "entity_match_high_confidence.csv"
 
 HANDLE_SUFFIXES = ("hq", "io", "org", "inc")
 
@@ -61,6 +62,7 @@ def main() -> None:
     output: list[dict] = []
     for signal_name in sorted(signals["name"].dropna().astype(str).unique(), key=str.lower):
         variants = signal_variants(signal_name)
+        base = normalize_company_name(signal_name)
         candidates: dict[tuple[str, str], tuple[float, str, int, object, object]] = {}
         for variant in variants:
             pool = prefix.get(variant[:3], [])
@@ -78,12 +80,14 @@ def main() -> None:
             output.append(
                 {
                     "signal_name": signal_name,
+                    "base_normalized": base,
                     "signal_variants": " | ".join(variants),
                     "candidate_rank": None,
                     "candidate_issuer": None,
                     "normalized_candidate": None,
                     "similarity": None,
                     "matched_variant": None,
+                    "variant_exact": False,
                     "filing_count": None,
                     "first_event": None,
                     "last_event": None,
@@ -95,12 +99,14 @@ def main() -> None:
             output.append(
                 {
                     "signal_name": signal_name,
+                    "base_normalized": base,
                     "signal_variants": " | ".join(variants),
                     "candidate_rank": rank,
                     "candidate_issuer": issuer_name,
                     "normalized_candidate": normalized,
                     "similarity": round(score, 4),
                     "matched_variant": variant,
+                    "variant_exact": bool(score == 1.0),
                     "filing_count": count,
                     "first_event": first_event,
                     "last_event": last_event,
@@ -108,8 +114,19 @@ def main() -> None:
             )
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(output).to_csv(OUTPUT, index=False)
-    print(f"Wrote {len(output)} candidate rows to {OUTPUT}")
+    audit = pd.DataFrame(output)
+    audit.to_csv(OUTPUT, index=False)
+
+    high = audit[
+        audit["variant_exact"].fillna(False)
+        & audit["candidate_issuer"].notna()
+        & (audit["matched_variant"] != audit["base_normalized"])
+    ].copy()
+    high = high.sort_values(["signal_name", "candidate_rank"]).drop_duplicates("signal_name", keep="first")
+    high.to_csv(HIGH_CONFIDENCE_OUTPUT, index=False)
+
+    print(f"Wrote {len(audit)} candidate rows to {OUTPUT}")
+    print(f"Wrote {len(high)} exact handle-normalization candidates to {HIGH_CONFIDENCE_OUTPUT}")
 
 
 if __name__ == "__main__":
