@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "detail": "sec_form_d_2026_q2_ingested",
+  "model_status": "not_attempted",
+  "period": "2026Q2",
+  "recorded_at": "2026-08-07T01:25:34.230514+00:00",
+  "ingest_log_tail": "/home/runner/work/vcscout-ai/vcscout-ai/scripts/ingest_sec_form_d.py:53: UserWarning: Could not infer format, so each element will be parsed individually, falling back to `dateutil`. To ensure parsing is consistent and as-expected, please specify a format.\n  filing_date = pd.to_datetime(merged.get(\"FILING_DATE\"), errors=\"coerce\", utc=True)\nAdded 16640 Form D filings; funding-event store now has 16640 rows.\n",
+  "labels_log_tail": null,
+  "model_log_tail": null
+}
