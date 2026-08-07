@@ -1,4 +1,4 @@
-from vcscout.commercial import extract_commercial_signals
+from vcscout.commercial import extract_commercial_signals, is_company_website_url
 
 
 def test_extracts_visible_go_to_market_signals():
@@ -27,3 +27,10 @@ def test_ignores_script_only_marketing_terms():
     signals = extract_commercial_signals(html)
     assert signals["pricing_signal"] == 0
     assert signals["commercial_momentum_score"] == 0
+
+
+def test_rejects_code_and_social_hosts_as_company_websites():
+    assert not is_company_website_url("https://github.com/example")
+    assert not is_company_website_url("https://docs.github.com/example")
+    assert not is_company_website_url("https://www.linkedin.com/company/example")
+    assert is_company_website_url("https://example.com")
