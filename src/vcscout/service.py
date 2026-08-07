@@ -34,6 +34,9 @@ def get_ranked_startups(force_refresh: bool = False) -> tuple[pd.DataFrame, dict
     scored = score_startups(flat)
     ranked = deduplicate_for_ranking(scored)
     ranked = attach_commercial_momentum(ranked)
+    # Backwards-compatible internal field name remains available, while the public
+    # terminology correctly describes this as a maturity level rather than momentum.
+    ranked["commercial_maturity_score"] = ranked["commercial_momentum_score"]
     ranked = attach_funding_pattern_index(ranked)
     ranked = attach_funding_probabilities(ranked)
     metadata = dataset_metadata(payload)
