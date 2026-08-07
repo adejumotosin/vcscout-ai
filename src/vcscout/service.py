@@ -7,6 +7,7 @@ import pandas as pd
 
 from .config import settings
 from .data import dataset_metadata, fetch_live_payload, flatten_startups
+from .probability import attach_funding_probabilities, model_status
 from .scoring import deduplicate_for_ranking, score_startups
 
 _CACHE: dict[str, Any] = {"ts": 0.0, "payload": None}
@@ -30,4 +31,7 @@ def get_ranked_startups(force_refresh: bool = False) -> tuple[pd.DataFrame, dict
     flat = flatten_startups(payload)
     scored = score_startups(flat)
     ranked = deduplicate_for_ranking(scored)
-    return ranked, dataset_metadata(payload)
+    ranked = attach_funding_probabilities(ranked)
+    metadata = dataset_metadata(payload)
+    metadata["funding_model"] = model_status()
+    return ranked, metadata
