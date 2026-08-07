@@ -15,7 +15,10 @@ sys.path.insert(0, str(ROOT / "src"))
 from vcscout.outcomes import dedupe_funding_events  # noqa: E402
 
 OUTPUT = ROOT / "data" / "funding_events" / "sec_form_d_events.csv"
-SEC_URL = "https://www.sec.gov/files/datastandardsinnovation/data/form-d-data-sets/{year}q{quarter}_d.zip"
+SEC_URLS = [
+    "https://www.sec.gov/files/datastandardsinnovation/data/form-d-data-sets/{year}q{quarter}_d.zip",
+    "https://www.sec.gov/files/structureddata/data/form-d-data-sets/{year}q{quarter}_d.zip",
+]
 
 
 def _read_table(zf: zipfile.ZipFile, stem: str) -> pd.DataFrame:
@@ -30,12 +33,31 @@ def _money(series: pd.Series) -> pd.Series:
     return pd.to_numeric(series.replace({"Indefinite": None, "": None}), errors="coerce")
 
 
-def download_quarter(year: int, quarter: int, user_agent: str) -> pd.DataFrame:
-    url = SEC_URL.format(year=year, quarter=quarter)
-    response = requests.get(url, timeout=90, headers={"User-Agent": user_agent, "Accept-Encoding": "gzip, deflate"})
-    response.raise_for_status()
+def _download_zip(year: int, quarter: int, user_agent: str) -> bytes:
+    headers = {
+        "User-Agent": user_agent,
+        "Accept-Encoding": "gzip, deflate",
+        "Accept": "application/zip, application/octet-stream, */*",
+    }
+    attempts: list[str] = []
+    for template in SEC_URLS:
+        url = template.format(year=year, quarter=quarter)
+        response = requests.get(url, timeout=90, headers=headers)
+        if response.ok:
+            print(f"Downloaded SEC Form D {year}Q{quarter} from {url}")
+            return response.content
+        attempts.append(f"{response.status_code} {url}")
+        if response.status_code not in {404, 410}:
+            response.raise_for_status()
+    raise FileNotFoundError(
+        f"SEC Form D ZIP not found for {year}Q{quarter}; attempts: {'; '.join(attempts)}"
+    )
 
-    with zipfile.ZipFile(io.BytesIO(response.content)) as zf:
+
+def download_quarter(year: int, quarter: int, user_agent: str) -> pd.DataFrame:
+    content = _download_zip(year, quarter, user_agent)
+
+    with zipfile.ZipFile(io.BytesIO(content)) as zf:
         submissions = _read_table(zf, "FORMDSUBMISSION")
         issuers = _read_table(zf, "ISSUERS")
         offerings = _read_table(zf, "OFFERING")
