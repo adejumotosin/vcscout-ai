@@ -28,6 +28,15 @@ def _finite(value: Any) -> bool:
         return False
 
 
+def _ordinal(value: Any) -> str:
+    try:
+        number = int(round(float(value)))
+    except (TypeError, ValueError):
+        return "n/a"
+    suffix = "th" if 10 <= number % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(number % 10, "th")
+    return f"{number}{suffix}"
+
+
 def build_research_report(row: Mapping[str, Any]) -> dict[str, Any]:
     score = float(row.get("vc_scout_score") or 0.0)
     probability = row.get("funding_probability_90d")
@@ -51,7 +60,7 @@ def build_research_report(row: Mapping[str, Any]) -> dict[str, Any]:
         positives.append(f"The observed public engineering surface includes approximately {_n(contributors)} contributors.")
     if pattern_available:
         positives.append(
-            f"Its Historical Funding Pattern Index is {float(pattern_index):.1f}/100, meaning its current public-engineering pattern ranks near the {float(pattern_index):.0f}th percentile of the live comparison universe under VCScout's historical case-control ranker."
+            f"Its Historical Funding Pattern Index is {float(pattern_index):.1f}/100, meaning its current public-engineering pattern ranks near the {_ordinal(pattern_index)} percentile of the live comparison universe under VCScout's historical case-control ranker."
         )
     if not positives:
         positives.append("The company is ranked primarily by its relative position within the current VCScout universe rather than one dominant breakout metric.")
