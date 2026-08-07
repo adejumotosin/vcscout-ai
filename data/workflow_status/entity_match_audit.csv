@@ -1,0 +1,217 @@
+signal_name,signal_variants,candidate_rank,candidate_issuer,normalized_candidate,similarity,matched_variant,filing_count,first_event,last_event
+airbytehq,airbyte | airbytehq,1.0,"Airobes, LLC",airobes,0.7143,airbyte,1.0,2025-09-12 00:00:00+00:00,2025-09-12 00:00:00+00:00
+airbytehq,airbyte | airbytehq,2.0,AirTM Inc,airtm,0.6667,airbyte,1.0,2025-12-23 00:00:00+00:00,2025-12-23 00:00:00+00:00
+airbytehq,airbyte | airbytehq,3.0,"AIRE 204, LLC",aire 204,0.5333,airbyte,1.0,2025-09-05 00:00:00+00:00,2025-09-05 00:00:00+00:00
+airbytehq,airbyte | airbytehq,4.0,AirTap AI Inc.,airtap ai,0.5,airbyte,1.0,2025-09-04 00:00:00+00:00,2025-09-04 00:00:00+00:00
+airbytehq,airbyte | airbytehq,5.0,"Airbase Intelligence, Inc.",airbase intelligence,0.4444,airbyte,1.0,2025-10-07 00:00:00+00:00,2025-10-07 00:00:00+00:00
+akto-api-security,akto api security | aktoapisecurity,,,,,,,,
+andes,andes,1.0,ANDERSEN CORP,andersen,0.7692,andes,1.0,2026-02-24 00:00:00+00:00,2026-02-24 00:00:00+00:00
+andes,andes,2.0,"Andel Co-op, Inc.",andel op,0.6154,andes,1.0,2025-08-22 00:00:00+00:00,2025-08-22 00:00:00+00:00
+andes,andes,3.0,AndHealth LLC,andhealth,0.5714,andes,1.0,2025-08-04 00:00:00+00:00,2025-08-04 00:00:00+00:00
+andes,andes,4.0,Andium Inc.,andium,0.5455,andes,1.0,2025-09-30 00:00:00+00:00,2025-09-30 00:00:00+00:00
+andes,andes,5.0,Andus Labs LLC,andus labs,0.5333,andes,1.0,2025-05-09 00:00:00+00:00,2025-05-09 00:00:00+00:00
+atrocore,atrocore,1.0,Atropos Group Inc.,atropos group,0.5714,atrocore,1.0,2025-07-10 00:00:00+00:00,2025-07-10 00:00:00+00:00
+atrocore,atrocore,2.0,Atreon Orthopedics LLC,atreon orthopedics,0.5385,atrocore,2.0,2022-10-06 00:00:00+00:00,2022-10-06 00:00:00+00:00
+atrocore,atrocore,3.0,"Atrum Ventures 6, LP",atrum ventures 6,0.4167,atrocore,1.0,2025-10-31 00:00:00+00:00,2025-10-31 00:00:00+00:00
+atrocore,atrocore,4.0,Atrum Ventures 8 LLC,atrum ventures 8,0.4167,atrocore,1.0,2025-10-31 00:00:00+00:00,2025-10-31 00:00:00+00:00
+atrocore,atrocore,5.0,"Atreides Low Net Fund, LP",atreides low net fund,0.3448,atrocore,1.0,2026-01-01 00:00:00+00:00,2026-01-01 00:00:00+00:00
+bagisto,bagisto,1.0,Bagels & Co.,bagels and,0.4706,bagisto,1.0,2025-12-22 00:00:00+00:00,2025-12-22 00:00:00+00:00
+bagisto,bagisto,2.0,BAGH-B LLC,bagh b,0.4615,bagisto,1.0,2019-03-15 00:00:00+00:00,2019-03-15 00:00:00+00:00
+bagisto,bagisto,3.0,"BAG Ventures Fund I, LP",bag ventures fund i,0.3077,bagisto,1.0,2024-07-19 00:00:00+00:00,2024-07-19 00:00:00+00:00
+bagisto,bagisto,4.0,BAG Q2 Deal 1 a Series of CGF2021 LLC,bag q2 deal 1 a series of cgf2021,0.3,bagisto,1.0,2026-06-10 00:00:00+00:00,2026-06-10 00:00:00+00:00
+bagisto,bagisto,5.0,"BAG Ventures Fund I-A, LP",bag ventures fund i a,0.2857,bagisto,1.0,2024-07-19 00:00:00+00:00,2024-07-19 00:00:00+00:00
+bakaphp,bakaphp,1.0,"Bakay Capital Fund, L.P.",bakay capital fund l p,0.4138,bakaphp,1.0,2020-06-30 00:00:00+00:00,2020-06-30 00:00:00+00:00
+bakaphp,bakaphp,2.0,"Bakkt Holdings, Inc.",bakkt holdings,0.381,bakaphp,1.0,2025-06-18 00:00:00+00:00,2025-06-18 00:00:00+00:00
+bakaphp,bakaphp,3.0,"Baker Tower Holdings, LLC",baker tower holdings,0.2963,bakaphp,1.0,2025-09-15 00:00:00+00:00,2025-09-15 00:00:00+00:00
+bakaphp,bakaphp,4.0,Bakery Block Associates LLC,bakery block associates,0.2667,bakaphp,1.0,2024-01-24 00:00:00+00:00,2024-01-24 00:00:00+00:00
+bakaphp,bakaphp,5.0,Baker Brothers Life Sciences LP,baker brothers life sciences,0.2286,bakaphp,1.0,2025-10-14 00:00:00+00:00,2025-10-14 00:00:00+00:00
+ballerina-platform,ballerina platform | ballerinaplatform,1.0,Ballers OpCo LLC,ballers opco,0.6,ballerina platform,1.0,2025-01-31 00:00:00+00:00,2025-01-31 00:00:00+00:00
+ballerina-platform,ballerina platform | ballerinaplatform,2.0,BALLAPPART LTD,ballappart,0.5926,ballerinaplatform,2.0,2025-05-27 00:00:00+00:00,2025-05-27 00:00:00+00:00
+ballerina-platform,ballerina platform | ballerinaplatform,3.0,Balanced Pharma Inc,balanced pharma,0.5455,ballerina platform,1.0,2024-11-27 00:00:00+00:00,2024-11-27 00:00:00+00:00
+ballerina-platform,ballerina platform | ballerinaplatform,4.0,"Ballston Spa Bancorp, Inc.",ballston spa bancorp,0.5263,ballerina platform,1.0,2026-03-25 00:00:00+00:00,2026-03-25 00:00:00+00:00
+ballerina-platform,ballerina platform | ballerinaplatform,5.0,Balance Theory Inc.,balance theory,0.5,ballerina platform,1.0,2025-04-25 00:00:00+00:00,2025-04-25 00:00:00+00:00
+betagouv,betagouv,1.0,Betaar LLC,betaar,0.5714,betagouv,1.0,2024-08-26 00:00:00+00:00,2024-08-26 00:00:00+00:00
+betagouv,betagouv,2.0,BetHog Inc.,bethog,0.5714,betagouv,1.0,2025-11-24 00:00:00+00:00,2025-11-24 00:00:00+00:00
+betagouv,betagouv,3.0,Bettar Inc,bettar,0.5714,betagouv,1.0,2024-04-18 00:00:00+00:00,2024-04-18 00:00:00+00:00
+betagouv,betagouv,4.0,"Beta AIV-S, LP",beta aiv s,0.5556,betagouv,1.0,2024-01-02 00:00:00+00:00,2024-01-02 00:00:00+00:00
+betagouv,betagouv,5.0,"BetterComp, Inc.",bettercomp,0.4444,betagouv,1.0,2026-05-19 00:00:00+00:00,2026-05-19 00:00:00+00:00
+castle-engine,castle engine | castleengine,1.0,Castle Fund Partners LP,castle fund partners,0.6061,castle engine,1.0,2023-05-01 00:00:00+00:00,2023-05-01 00:00:00+00:00
+castle-engine,castle engine | castleengine,2.0,"Castle Fund I, L.P.",castle fund i l p,0.6,castle engine,1.0,2025-11-28 00:00:00+00:00,2025-11-28 00:00:00+00:00
+castle-engine,castle engine | castleengine,3.0,Castle Ridge Apex LP,castle ridge apex,0.6,castle engine,1.0,2020-10-01 00:00:00+00:00,2020-10-01 00:00:00+00:00
+castle-engine,castle engine | castleengine,4.0,Castlebar Fund LP,castlebar fund,0.5926,castle engine,1.0,2025-05-01 00:00:00+00:00,2025-05-01 00:00:00+00:00
+castle-engine,castle engine | castleengine,5.0,Castlebar Fund Ltd,castlebar fund,0.5926,castle engine,1.0,2025-05-01 00:00:00+00:00,2025-05-01 00:00:00+00:00
+cilium,cilium,,,,,,,,
+ClickHouse,clickhouse,1.0,Clinch Resources Ltd.,clinch resources,0.6154,clickhouse,1.0,2026-03-17 00:00:00+00:00,2026-03-17 00:00:00+00:00
+ClickHouse,clickhouse,2.0,"CLICR HOLDINGS, INC.",clicr holdings,0.5833,clickhouse,1.0,2026-05-25 00:00:00+00:00,2026-05-25 00:00:00+00:00
+ClickHouse,clickhouse,3.0,"Climalock Holdings, LLC",climalock holdings,0.5714,clickhouse,1.0,2025-12-30 00:00:00+00:00,2025-12-30 00:00:00+00:00
+ClickHouse,clickhouse,4.0,"cliexa, Inc.",cliexa,0.5,clickhouse,1.0,2025-05-29 00:00:00+00:00,2025-05-29 00:00:00+00:00
+ClickHouse,clickhouse,5.0,Cliffs LLC,cliffs,0.5,clickhouse,1.0,2025-12-05 00:00:00+00:00,2025-12-05 00:00:00+00:00
+dagster-io,dagster | dagster io | dagsterio,1.0,DAGOBAH SYSTEMS INC,dagobah systems,0.5455,dagster,1.0,2025-02-10 00:00:00+00:00,2025-02-10 00:00:00+00:00
+dbt-labs,dbt labs | dbtlabs,,,,,,,,
+debezium,debezium,1.0,"DEBIT MY DATA, INC.",debit my data,0.4762,debezium,1.0,2024-08-22 00:00:00+00:00,2024-08-22 00:00:00+00:00
+debezium,debezium,2.0,Debt Opportunities Plus Fund Ltd,debt opportunities plus fund,0.2778,debezium,1.0,2020-01-01 00:00:00+00:00,2020-01-01 00:00:00+00:00
+debezium,debezium,3.0,Debbie a Series of GoodPaper Ventures Funds LLC,debbie a series of goodpaper ventures funds,0.2353,debezium,1.0,2026-01-30 00:00:00+00:00,2026-01-30 00:00:00+00:00
+ever-co,ever,1.0,Evers Inc.,evers,0.8889,ever,1.0,2026-02-12 00:00:00+00:00,2026-02-12 00:00:00+00:00
+ever-co,ever,2.0,"everee, inc.",everee,0.8,ever,1.0,2026-04-17 00:00:00+00:00,2026-04-17 00:00:00+00:00
+ever-co,ever,3.0,Evergold Corp.,evergold,0.6667,ever,1.0,2026-04-06 00:00:00+00:00,2026-04-06 00:00:00+00:00
+ever-co,ever,4.0,Evertune Inc.,evertune,0.6667,ever,1.0,2025-06-18 00:00:00+00:00,2025-06-18 00:00:00+00:00
+ever-co,ever,5.0,Evercycle Inc,evercycle,0.6154,ever,2.0,2023-10-05 00:00:00+00:00,2026-01-30 00:00:00+00:00
+FlaxEngine,flaxengine,1.0,Flamingo Marine Inc.,flamingo marine,0.64,flaxengine,1.0,2025-10-15 00:00:00+00:00,2025-10-15 00:00:00+00:00
+FlaxEngine,flaxengine,2.0,"Flapping Airplanes, Inc.",flapping airplanes,0.5714,flaxengine,1.0,2026-01-16 00:00:00+00:00,2026-01-16 00:00:00+00:00
+FlaxEngine,flaxengine,3.0,FLAMINGO DEX LTD.,flamingo dex,0.5455,flaxengine,1.0,2026-01-22 00:00:00+00:00,2026-01-22 00:00:00+00:00
+FlaxEngine,flaxengine,4.0,Flatiron Minerals LLC,flatiron minerals,0.5185,flaxengine,1.0,2025-10-10 00:00:00+00:00,2025-10-10 00:00:00+00:00
+FlaxEngine,flaxengine,5.0,FlameCo Holdings LLC,flameco holdings,0.4615,flaxengine,1.0,2025-04-15 00:00:00+00:00,2025-04-15 00:00:00+00:00
+fleetdm,fleetdm,1.0,FleetHD Inc.,fleethd,0.8571,fleetdm,2.0,2024-07-24 00:00:00+00:00,2025-07-22 00:00:00+00:00
+fleetdm,fleetdm,2.0,"Fleet PR DC REIT, LLC",fleet pr dc reit,0.5217,fleetdm,1.0,2026-01-08 00:00:00+00:00,2026-01-08 00:00:00+00:00
+fleetdm,fleetdm,3.0,Flexx Inc.,flexx,0.5,fleetdm,1.0,2025-11-25 00:00:00+00:00,2025-11-25 00:00:00+00:00
+fleetdm,fleetdm,4.0,Flex Lending 8 LLC,flex lending 8,0.4762,fleetdm,1.0,2025-01-13 00:00:00+00:00,2025-01-13 00:00:00+00:00
+fleetdm,fleetdm,5.0,Flex Lending 9 LLC,flex lending 9,0.4762,fleetdm,1.0,2025-08-06 00:00:00+00:00,2025-08-06 00:00:00+00:00
+gravitational,gravitational,1.0,Graviton LP,graviton,0.7619,gravitational,1.0,2026-04-01 00:00:00+00:00,2026-04-01 00:00:00+00:00
+gravitational,gravitational,2.0,GRAFTECH INTERNATIONAL LTD,graftech international,0.6857,gravitational,1.0,2026-03-18 00:00:00+00:00,2026-03-18 00:00:00+00:00
+gravitational,gravitational,3.0,Graton Station,graton station,0.6667,gravitational,2.0,2025-12-01 00:00:00+00:00,2025-12-01 00:00:00+00:00
+gravitational,gravitational,4.0,Gravity GTM Inc.,gravity gtm,0.5833,gravitational,2.0,2025-10-31 00:00:00+00:00,2026-05-27 00:00:00+00:00
+gravitational,gravitational,5.0,Gravity Platform I LLC,gravity platform i,0.5806,gravitational,2.0,2025-11-24 00:00:00+00:00,2025-12-08 00:00:00+00:00
+hapifhir,hapifhir,1.0,Happi Co.,happi,0.6154,hapifhir,1.0,2025-07-01 00:00:00+00:00,2025-07-01 00:00:00+00:00
+hapifhir,hapifhir,2.0,"Hapily Ever After, LLC",hapily ever after,0.48,hapifhir,1.0,2026-03-23 00:00:00+00:00,2026-03-23 00:00:00+00:00
+hapifhir,hapifhir,3.0,Happydahg LLC,happydahg,0.4706,hapifhir,1.0,2026-05-12 00:00:00+00:00,2026-05-12 00:00:00+00:00
+hapifhir,hapifhir,4.0,"Happier Camper, Inc.",happier camper,0.4545,hapifhir,1.0,2025-05-14 00:00:00+00:00,2025-05-14 00:00:00+00:00
+hapifhir,hapifhir,5.0,"HAPPE Spine, LLC",happe spine,0.4211,hapifhir,1.0,2024-07-31 00:00:00+00:00,2024-07-31 00:00:00+00:00
+harvard-edge,harvard edge | harvardedge,1.0,Harvard Nutrition Inc.,harvard nutrition,0.5517,harvard edge,2.0,2025-08-01 00:00:00+00:00,2026-06-04 00:00:00+00:00
+harvard-edge,harvard edge | harvardedge,2.0,"Harvest Prairie Estates, LLC",harvest prairie estates,0.5143,harvard edge,1.0,2025-08-27 00:00:00+00:00,2025-08-27 00:00:00+00:00
+harvard-edge,harvard edge | harvardedge,3.0,"Harbor Ridge Capital, LLC",harbor ridge capital,0.5,harvard edge,1.0,2025-12-03 00:00:00+00:00,2025-12-03 00:00:00+00:00
+harvard-edge,harvard edge | harvardedge,4.0,Hardshell Inc,hardshell,0.5,harvardedge,1.0,2025-09-09 00:00:00+00:00,2025-09-09 00:00:00+00:00
+harvard-edge,harvard edge | harvardedge,5.0,"Hark Cayman Feeder V, LP",hark cayman feeder v,0.5,harvard edge,1.0,2026-04-03 00:00:00+00:00,2026-04-03 00:00:00+00:00
+horizontalsystems,horizontalsystems,1.0,Horizon Studios LLC,horizon studios,0.625,horizontalsystems,1.0,2025-07-16 00:00:00+00:00,2025-07-16 00:00:00+00:00
+horizontalsystems,horizontalsystems,2.0,Horizon L.P.,horizon l p,0.5714,horizontalsystems,1.0,2025-11-06 00:00:00+00:00,2025-11-06 00:00:00+00:00
+horizontalsystems,horizontalsystems,3.0,HORIZON OAKS CAPITAL LLC,horizon oaks capital,0.5405,horizontalsystems,1.0,2025-12-16 00:00:00+00:00,2025-12-16 00:00:00+00:00
+horizontalsystems,horizontalsystems,4.0,Horizon Advisory 506B LLC,horizon advisory 506b,0.5263,horizontalsystems,1.0,2026-04-02 00:00:00+00:00,2026-04-02 00:00:00+00:00
+horizontalsystems,horizontalsystems,5.0,Horizon Advisory 506C LLC,horizon advisory 506c,0.5263,horizontalsystems,1.0,2026-04-02 00:00:00+00:00,2026-04-02 00:00:00+00:00
+hpi-schul-cloud,hpi schul cloud | hpischulcloud,1.0,HPI Farmhouse DST,hpi farmhouse dst,0.5,hpi schul cloud,8.0,2026-03-06 00:00:00+00:00,2026-03-06 00:00:00+00:00
+hpi-schul-cloud,hpi schul cloud | hpischulcloud,2.0,HPIMF BONDS HOLDINGS DFW009 LP,hpimf bonds holdings dfw009,0.4286,hpi schul cloud,1.0,2025-09-04 00:00:00+00:00,2025-09-04 00:00:00+00:00
+hpi-schul-cloud,hpi schul cloud | hpischulcloud,3.0,HPI Real Estate Fund XV LLC,hpi real estate fund xv,0.4211,hpi schul cloud,1.0,2025-07-14 00:00:00+00:00,2025-07-14 00:00:00+00:00
+hpi-schul-cloud,hpi schul cloud | hpischulcloud,4.0,HPI Real Estate Fund XIV LLC,hpi real estate fund xiv,0.4103,hpi schul cloud,1.0,2024-08-01 00:00:00+00:00,2024-08-01 00:00:00+00:00
+hpi-schul-cloud,hpi schul cloud | hpischulcloud,5.0,HPI Bandera DST,hpi bandera dst,0.3333,hpi schul cloud,3.0,2025-06-11 00:00:00+00:00,2025-06-11 00:00:00+00:00
+ihmcrobotics,ihmcrobotics,,,,,,,,
+langchain-ai,langchain ai | langchainai,1.0,Land Capital Fund I LLC,land capital fund i,0.5806,langchain ai,1.0,2026-06-02 00:00:00+00:00,2026-06-02 00:00:00+00:00
+langchain-ai,langchain ai | langchainai,2.0,LANCEA PBC,lancea pbc,0.5455,langchain ai,2.0,2025-11-07 00:00:00+00:00,2025-11-07 00:00:00+00:00
+langchain-ai,langchain ai | langchainai,3.0,"Language IO, Inc.",language io,0.5455,langchainai,1.0,2025-12-05 00:00:00+00:00,2025-12-05 00:00:00+00:00
+langchain-ai,langchain ai | langchainai,4.0,Landline Co,landline,0.5263,langchainai,3.0,2025-06-25 00:00:00+00:00,2026-03-11 00:00:00+00:00
+langchain-ai,langchain ai | langchainai,5.0,"Landbank III, LP",landbank iii,0.5217,langchainai,1.0,2026-04-21 00:00:00+00:00,2026-04-21 00:00:00+00:00
+LiteFarmOrg,litefarm | litefarmorg,1.0,"Little Sesame, Inc.",little sesame,0.5714,litefarm,1.0,2025-06-30 00:00:00+00:00,2025-06-30 00:00:00+00:00
+LiteFarmOrg,litefarm | litefarmorg,2.0,"Litewave.AI, Inc",litewave ai,0.5263,litefarm,8.0,2025-01-29 00:00:00+00:00,2025-01-29 00:00:00+00:00
+LiteFarmOrg,litefarm | litefarmorg,3.0,Litera Holdco LP,litera holdco,0.5,litefarmorg,1.0,2024-06-10 00:00:00+00:00,2024-06-10 00:00:00+00:00
+LiteFarmOrg,litefarm | litefarmorg,4.0,"LIT Financial Corporation, Inc.",lit financial,0.4762,litefarm,3.0,2025-01-22 00:00:00+00:00,2025-12-15 00:00:00+00:00
+LiteFarmOrg,litefarm | litefarmorg,5.0,"LITLaboratories, Inc.",litlaboratories,0.4615,litefarmorg,1.0,2025-11-12 00:00:00+00:00,2025-11-12 00:00:00+00:00
+masslight,masslight,1.0,MASTEC INC,mastec,0.5333,masslight,1.0,2021-12-30 00:00:00+00:00,2021-12-30 00:00:00+00:00
+masslight,masslight,2.0,"Massive Artemis, LLC",massive artemis,0.5,masslight,1.0,2026-04-30 00:00:00+00:00,2026-04-30 00:00:00+00:00
+masslight,masslight,3.0,"MASC, Inc.",masc,0.4615,masslight,3.0,2020-09-28 00:00:00+00:00,2025-06-25 00:00:00+00:00
+masslight,masslight,4.0,Massey Hall Investments LP,massey hall investments,0.4375,masslight,1.0,2026-05-11 00:00:00+00:00,2026-05-11 00:00:00+00:00
+masslight,masslight,5.0,"MasCap, LLC - Series 3",mascap series 3,0.4167,masslight,1.0,2025-09-15 00:00:00+00:00,2025-09-15 00:00:00+00:00
+mdn,mdn,,,,,,,,
+naev,naev,,,,,,,,
+nco,nco,,,,,,,,
+NDLANO,ndlano,,,,,,,,
+nextcloud,nextcloud,1.0,"NextCure, Inc.",nextcure,0.7059,nextcloud,1.0,2025-11-12 00:00:00+00:00,2025-11-12 00:00:00+00:00
+nextcloud,nextcloud,2.0,NEXTBio Fund Ltd.,nextbio fund,0.6667,nextcloud,1.0,2024-11-01 00:00:00+00:00,2024-11-01 00:00:00+00:00
+nextcloud,nextcloud,3.0,NextFolio Inc.,nextfolio,0.6667,nextcloud,1.0,2026-01-09 00:00:00+00:00,2026-01-09 00:00:00+00:00
+nextcloud,nextcloud,4.0,NextFolio LLC,nextfolio,0.6667,nextcloud,1.0,2025-11-07 00:00:00+00:00,2025-11-07 00:00:00+00:00
+nextcloud,nextcloud,5.0,Next Bloom Inc,next bloom,0.6316,nextcloud,1.0,2026-01-09 00:00:00+00:00,2026-01-09 00:00:00+00:00
+nocobase,nocobase,1.0,"NOCERA, INC.",nocera,0.5714,nocobase,1.0,2025-08-29 00:00:00+00:00,2025-08-29 00:00:00+00:00
+nocobase,nocobase,2.0,"Nocion Therapeutics, Inc.",nocion therapeutics,0.4444,nocobase,1.0,2025-12-15 00:00:00+00:00,2025-12-15 00:00:00+00:00
+nocobase,nocobase,3.0,"Noctua Interactive, Inc.",noctua interactive,0.3846,nocobase,1.0,2025-01-28 00:00:00+00:00,2025-01-28 00:00:00+00:00
+nocobase,nocobase,4.0,"NOCTEM Health, Inc.",noctem health,0.381,nocobase,1.0,2026-02-20 00:00:00+00:00,2026-02-20 00:00:00+00:00
+odpi,odpi,,,,,,,,
+ohrrpgce,ohrrpgce,,,,,,,,
+open-condo-software,open condo software | opencondosoftware,1.0,"Opendorse, Inc.",opendorse,0.6154,opencondosoftware,1.0,2026-02-04 00:00:00+00:00,2026-02-04 00:00:00+00:00
+open-condo-software,open condo software | opencondosoftware,2.0,"OPEN DOORS PARTNERS, LLC",open doors partners,0.5789,open condo software,25.0,2025-07-11 00:00:00+00:00,2026-05-20 00:00:00+00:00
+open-condo-software,open condo software | opencondosoftware,3.0,"Opendate, Inc.",opendate,0.56,opencondosoftware,2.0,2025-11-03 00:00:00+00:00,2025-12-17 00:00:00+00:00
+open-condo-software,open condo software | opencondosoftware,4.0,"OPEN Unicorn Fund II-A, LP",open unicorn fund ii a,0.5366,open condo software,1.0,2026-05-27 00:00:00+00:00,2026-05-27 00:00:00+00:00
+open-condo-software,open condo software | opencondosoftware,5.0,"Open Air Hotels & Resorts, LLC",open air hotels and resorts,0.5217,open condo software,1.0,2023-10-11 00:00:00+00:00,2023-10-11 00:00:00+00:00
+OpenC3,openc3,1.0,"OPe, LLC",ope,0.6667,openc3,1.0,2025-05-09 00:00:00+00:00,2025-05-09 00:00:00+00:00
+OpenC3,openc3,2.0,OpenWav Inc.,openwav,0.6154,openc3,1.0,2026-03-31 00:00:00+00:00,2026-03-31 00:00:00+00:00
+OpenC3,openc3,3.0,"Opendate, Inc.",opendate,0.5714,openc3,2.0,2025-11-03 00:00:00+00:00,2025-12-17 00:00:00+00:00
+OpenC3,openc3,4.0,"OpenLogx, Inc.",openlogx,0.5714,openc3,1.0,2025-12-01 00:00:00+00:00,2025-12-01 00:00:00+00:00
+OpenC3,openc3,5.0,"Opendorse, Inc.",opendorse,0.5333,openc3,1.0,2026-02-04 00:00:00+00:00,2026-02-04 00:00:00+00:00
+OpenCTI-Platform,opencti platform | openctiplatform,1.0,Opentrons Labworks Inc.,opentrons labworks,0.5882,opencti platform,1.0,2025-11-20 00:00:00+00:00,2025-11-20 00:00:00+00:00
+OpenCTI-Platform,opencti platform | openctiplatform,2.0,"Opendate, Inc.",opendate,0.5217,openctiplatform,2.0,2025-11-03 00:00:00+00:00,2025-12-17 00:00:00+00:00
+OpenCTI-Platform,opencti platform | openctiplatform,3.0,"OpenLogx, Inc.",openlogx,0.5217,openctiplatform,1.0,2025-12-01 00:00:00+00:00,2025-12-01 00:00:00+00:00
+OpenCTI-Platform,opencti platform | openctiplatform,4.0,"OPEN DOORS PARTNERS, LLC",open doors partners,0.5143,opencti platform,25.0,2025-07-11 00:00:00+00:00,2026-05-20 00:00:00+00:00
+OpenCTI-Platform,opencti platform | openctiplatform,5.0,"Opendorse, Inc.",opendorse,0.5,openctiplatform,1.0,2026-02-04 00:00:00+00:00,2026-02-04 00:00:00+00:00
+opennem,opennem,1.0,"Opendate, Inc.",opendate,0.6667,opennem,2.0,2025-11-03 00:00:00+00:00,2025-12-17 00:00:00+00:00
+opennem,opennem,2.0,"Opendorse, Inc.",opendorse,0.625,opennem,1.0,2026-02-04 00:00:00+00:00,2026-02-04 00:00:00+00:00
+opennem,opennem,3.0,"OPe, LLC",ope,0.6,opennem,1.0,2025-05-09 00:00:00+00:00,2025-05-09 00:00:00+00:00
+opennem,opennem,4.0,"OpenRouter, Inc.",openrouter,0.5882,opennem,1.0,2025-05-27 00:00:00+00:00,2025-05-27 00:00:00+00:00
+opennem,opennem,5.0,OpenWav Inc.,openwav,0.5714,opennem,1.0,2026-03-31 00:00:00+00:00,2026-03-31 00:00:00+00:00
+OpenOLAT,openolat,1.0,"Opendate, Inc.",opendate,0.75,openolat,2.0,2025-11-03 00:00:00+00:00,2025-12-17 00:00:00+00:00
+OpenOLAT,openolat,2.0,"OPEN OAI I, LP",open oai i,0.6667,openolat,1.0,2026-03-16 00:00:00+00:00,2026-03-16 00:00:00+00:00
+OpenOLAT,openolat,3.0,"OpenRouter, Inc.",openrouter,0.6667,openolat,1.0,2025-05-27 00:00:00+00:00,2025-05-27 00:00:00+00:00
+OpenOLAT,openolat,4.0,OpenWav Inc.,openwav,0.6667,openolat,1.0,2026-03-31 00:00:00+00:00,2026-03-31 00:00:00+00:00
+OpenOLAT,openolat,5.0,"OpenLogx, Inc.",openlogx,0.625,openolat,1.0,2025-12-01 00:00:00+00:00,2025-12-01 00:00:00+00:00
+orbiternassp,orbiternassp,1.0,"Orbit Genomics, Inc.",orbit genomics,0.6154,orbiternassp,1.0,2024-07-29 00:00:00+00:00,2024-07-29 00:00:00+00:00
+orbiternassp,orbiternassp,2.0,Orbital7 LLC,orbital7,0.6,orbiternassp,1.0,2026-03-11 00:00:00+00:00,2026-03-11 00:00:00+00:00
+orbiternassp,orbiternassp,3.0,"OrbiMed Partners, Ltd.",orbimed partners,0.5714,orbiternassp,1.0,1996-12-01 00:00:00+00:00,1996-12-01 00:00:00+00:00
+orbiternassp,orbiternassp,4.0,"OrbitalRx, Inc.",orbitalrx,0.5714,orbiternassp,1.0,2025-08-26 00:00:00+00:00,2025-08-26 00:00:00+00:00
+orbiternassp,orbiternassp,5.0,"Orb Aerospace, Inc.",orb aerospace,0.56,orbiternassp,1.0,2025-07-31 00:00:00+00:00,2025-07-31 00:00:00+00:00
+paperless-ngx,paperless ngx | paperlessngx,1.0,Paperstack Inc.,paperstack,0.5455,paperlessngx,1.0,2025-08-15 00:00:00+00:00,2025-08-15 00:00:00+00:00
+paperless-ngx,paperless ngx | paperlessngx,2.0,PAPER PROFITS V2 LLC,paper profits v2,0.4828,paperless ngx,1.0,2025-08-08 00:00:00+00:00,2025-08-08 00:00:00+00:00
+paperless-ngx,paperless ngx | paperlessngx,3.0,Paper Profits V3 LLC,paper profits v3,0.4828,paperless ngx,1.0,2023-11-08 00:00:00+00:00,2023-11-08 00:00:00+00:00
+paperless-ngx,paperless ngx | paperlessngx,4.0,"Paper Profits, LLC",paper profits,0.48,paperlessngx,1.0,2020-04-01 00:00:00+00:00,2020-04-01 00:00:00+00:00
+paperless-ngx,paperless ngx | paperlessngx,5.0,Papyrus Capital Fund LP,papyrus capital fund,0.4242,paperless ngx,1.0,2016-01-01 00:00:00+00:00,2016-01-01 00:00:00+00:00
+ParabolInc,parabol | parabolinc,1.0,Paralos Bioscience Inc.,paralos bioscience,0.6429,parabolinc,4.0,2025-07-28 00:00:00+00:00,2025-07-28 00:00:00+00:00
+ParabolInc,parabol | parabolinc,2.0,Parcel Inc.,parcel,0.6154,parabol,2.0,2025-12-11 00:00:00+00:00,2026-06-23 00:00:00+00:00
+ParabolInc,parabol | parabolinc,3.0,Parkva Corp,parkva,0.6154,parabol,1.0,2025-09-18 00:00:00+00:00,2025-09-18 00:00:00+00:00
+ParabolInc,parabol | parabolinc,4.0,"Paradigm Holdings, LLC",paradigm holdings,0.5926,parabolinc,1.0,2018-12-31 00:00:00+00:00,2018-12-31 00:00:00+00:00
+ParabolInc,parabol | parabolinc,5.0,"Par Health, Inc.",par health,0.5882,parabol,1.0,2025-11-10 00:00:00+00:00,2025-11-10 00:00:00+00:00
+particify,particify,1.0,"Park City, LLC",park city,0.6667,particify,1.0,2025-07-17 00:00:00+00:00,2025-07-17 00:00:00+00:00
+particify,particify,2.0,"Parthion, LLC",parthion,0.5882,particify,1.0,2024-05-20 00:00:00+00:00,2024-05-20 00:00:00+00:00
+particify,particify,3.0,Parcel Inc.,parcel,0.5333,particify,2.0,2025-12-11 00:00:00+00:00,2026-06-23 00:00:00+00:00
+particify,particify,4.0,"Parento, Inc.",parento,0.5,particify,1.0,2025-06-12 00:00:00+00:00,2025-06-12 00:00:00+00:00
+particify,particify,5.0,Paretor LLC,paretor,0.5,particify,2.0,2024-10-15 00:00:00+00:00,2025-10-15 00:00:00+00:00
+polarsource,polarsource,1.0,Polar Tensor Corp.,polar tensor,0.6957,polarsource,1.0,2025-09-09 00:00:00+00:00,2025-09-09 00:00:00+00:00
+polarsource,polarsource,2.0,Polar Investors LP,polar investors,0.6154,polarsource,1.0,2025-12-02 00:00:00+00:00,2025-12-02 00:00:00+00:00
+polarsource,polarsource,3.0,POLARIS GROUP TRUST,polaris group trust,0.6,polarsource,1.0,1991-06-12 00:00:00+00:00,1991-06-12 00:00:00+00:00
+polarsource,polarsource,4.0,POLAR FUND LTD,polar fund,0.5714,polarsource,1.0,2017-02-01 00:00:00+00:00,2017-02-01 00:00:00+00:00
+polarsource,polarsource,5.0,"Poly Group, LLC",poly group,0.5714,polarsource,1.0,2025-09-10 00:00:00+00:00,2025-09-10 00:00:00+00:00
+PostHog,posthog,1.0,Post Rock Ag LLC,post rock ag,0.6316,posthog,1.0,2026-04-21 00:00:00+00:00,2026-04-21 00:00:00+00:00
+PostHog,posthog,2.0,Posh Group Inc.,posh group,0.5882,posthog,1.0,2025-12-19 00:00:00+00:00,2025-12-19 00:00:00+00:00
+PostHog,posthog,3.0,"POSTR TECHNOLOGIES, INC.",postr technologies,0.56,posthog,1.0,2026-01-27 00:00:00+00:00,2026-01-27 00:00:00+00:00
+PostHog,posthog,4.0,"Positron AI, Inc.",positron ai,0.5556,posthog,2.0,2025-06-16 00:00:00+00:00,2026-01-16 00:00:00+00:00
+PostHog,posthog,5.0,"PostCare, LLC",postcare,0.5333,posthog,1.0,2025-12-02 00:00:00+00:00,2025-12-02 00:00:00+00:00
+projectdiscovery,projectdiscovery,1.0,"Project Geyser, LP",project geyser,0.6667,projectdiscovery,1.0,2025-05-19 00:00:00+00:00,2025-05-19 00:00:00+00:00
+projectdiscovery,projectdiscovery,2.0,Project Zero LLC,project zero,0.6429,projectdiscovery,1.0,2026-01-01 00:00:00+00:00,2026-01-01 00:00:00+00:00
+projectdiscovery,projectdiscovery,3.0,"Protoverse, Inc.",protoverse,0.6154,projectdiscovery,1.0,2026-06-05 00:00:00+00:00,2026-06-05 00:00:00+00:00
+projectdiscovery,projectdiscovery,4.0,"Project AC Investors, LLC",project ac investors,0.6111,projectdiscovery,1.0,2026-03-19 00:00:00+00:00,2026-03-19 00:00:00+00:00
+projectdiscovery,projectdiscovery,5.0,"Prospect Advisors, L.P.",prospect advisors l p,0.5946,projectdiscovery,1.0,2010-03-29 00:00:00+00:00,2010-03-29 00:00:00+00:00
+roboflow,roboflow,1.0,Roblox Corp,roblox,0.7143,roboflow,1.0,2026-06-02 00:00:00+00:00,2026-06-02 00:00:00+00:00
+roboflow,roboflow,2.0,"Roboro, Inc.",roboro,0.7143,roboflow,1.0,2025-12-09 00:00:00+00:00,2025-12-09 00:00:00+00:00
+roboflow,roboflow,3.0,Robin Motor Ltd,robin motor,0.5263,roboflow,1.0,2025-07-25 00:00:00+00:00,2025-07-25 00:00:00+00:00
+roboflow,roboflow,4.0,ROBRA Solutions LLC,robra solutions,0.5217,roboflow,1.0,2025-10-01 00:00:00+00:00,2025-10-01 00:00:00+00:00
+roboflow,roboflow,5.0,Robossis Inc,robossis,0.5,roboflow,2.0,2022-07-14 00:00:00+00:00,2025-07-25 00:00:00+00:00
+saleor,saleor,1.0,Salted Inc.,salted,0.6667,saleor,1.0,2025-12-16 00:00:00+00:00,2025-12-16 00:00:00+00:00
+saleor,saleor,2.0,Salazar Resources Ltd,salazar resources,0.5217,saleor,1.0,2025-12-17 00:00:00+00:00,2025-12-17 00:00:00+00:00
+saleor,saleor,3.0,"Saluna, Inc.",saluna,0.5,saleor,1.0,2026-05-27 00:00:00+00:00,2026-05-27 00:00:00+00:00
+saleor,saleor,4.0,"SAL Studios, Inc",sal studios,0.4706,saleor,1.0,2025-08-01 00:00:00+00:00,2025-08-01 00:00:00+00:00
+saleor,saleor,5.0,"Salta Stuart, LLC",salta stuart,0.4444,saleor,1.0,2026-06-09 00:00:00+00:00,2026-06-09 00:00:00+00:00
+tenzir,tenzir,1.0,Tenex Corp,tenex,0.5455,tenzir,1.0,2025-08-15 00:00:00+00:00,2025-08-15 00:00:00+00:00
+tenzir,tenzir,2.0,Ten Media Inc.,ten media,0.5333,tenzir,1.0,2025-08-31 00:00:00+00:00,2025-08-31 00:00:00+00:00
+tenzir,tenzir,3.0,"Tenbin Labs, Inc.",tenbin labs,0.4706,tenzir,1.0,2025-07-15 00:00:00+00:00,2025-07-15 00:00:00+00:00
+tenzir,tenzir,4.0,"Tender Food, Inc.",tender food,0.4706,tenzir,1.0,2025-10-15 00:00:00+00:00,2025-10-15 00:00:00+00:00
+tenzir,tenzir,5.0,"Tenon Medical, Inc.",tenon medical,0.4211,tenzir,3.0,2025-11-10 00:00:00+00:00,2026-03-11 00:00:00+00:00
+third-culture-software,third culture software | thirdculturesoftware,1.0,"Third Pole Solutions, LLC",third pole solutions,0.5714,third culture software,1.0,2026-04-01 00:00:00+00:00,2026-04-01 00:00:00+00:00
+third-culture-software,third culture software | thirdculturesoftware,2.0,THIRD POINT ULTRA LTD,third point ultra,0.5641,third culture software,1.0,1997-05-01 00:00:00+00:00,1997-05-01 00:00:00+00:00
+third-culture-software,third culture software | thirdculturesoftware,3.0,"ThirdLaw Molecular, Inc.",thirdlaw molecular,0.55,third culture software,1.0,2025-09-02 00:00:00+00:00,2025-09-02 00:00:00+00:00
+third-culture-software,third culture software | thirdculturesoftware,4.0,"Third Lake RE SFR Fund III, LP",third lake re sfr fund iii,0.5417,third culture software,1.0,2024-08-08 00:00:00+00:00,2024-08-08 00:00:00+00:00
+third-culture-software,third culture software | thirdculturesoftware,5.0,"THIRD PRIME FUSION SELECT, LP",third prime fusion select,0.5106,third culture software,1.0,2026-06-30 00:00:00+00:00,2026-06-30 00:00:00+00:00
+unacms,unacms,1.0,"Unanimous AI, Inc.",unanimous ai,0.5556,unacms,1.0,2025-09-15 00:00:00+00:00,2025-09-15 00:00:00+00:00
+unacms,unacms,2.0,Una Software US Corp.,una software us,0.381,unacms,1.0,2026-04-17 00:00:00+00:00,2026-04-17 00:00:00+00:00
+unacms,unacms,3.0,UNADILLA INTERSTATE RURAL DEVELOPMENT LLC,unadilla interstate rural development,0.186,unacms,1.0,2025-11-19 00:00:00+00:00,2025-11-19 00:00:00+00:00
+VictoriaMetrics,victoriametrics,1.0,"ViCardia Therapeutics, Inc.",vicardia therapeutics,0.6111,victoriametrics,1.0,2026-05-19 00:00:00+00:00,2026-05-19 00:00:00+00:00
+VictoriaMetrics,victoriametrics,2.0,"Vicora, Inc.",vicora,0.5714,victoriametrics,1.0,2025-01-31 00:00:00+00:00,2025-01-31 00:00:00+00:00
+VictoriaMetrics,victoriametrics,3.0,VictoryArc Partners Fund LP,victoryarc partners fund,0.5128,victoriametrics,1.0,2025-11-03 00:00:00+00:00,2025-11-03 00:00:00+00:00
+VictoriaMetrics,victoriametrics,4.0,"Victors Topco, L.P.",victors topco l p,0.5,victoriametrics,1.0,2025-12-23 00:00:00+00:00,2025-12-23 00:00:00+00:00
+VictoriaMetrics,victoriametrics,5.0,Vicarious Surgical Inc.,vicarious surgical,0.4848,victoriametrics,1.0,2025-10-09 00:00:00+00:00,2025-10-09 00:00:00+00:00
+vuestorefront,vuestorefront,1.0,"Vue180, LLC",vue180,0.3158,vuestorefront,1.0,2026-02-09 00:00:00+00:00,2026-02-09 00:00:00+00:00
+wazuh,wazuh,,,,,,,,
+zapplyjobs,zapplyjobs,1.0,ZaPay LLC.,zapay,0.5333,zapplyjobs,1.0,2025-12-30 00:00:00+00:00,2025-12-30 00:00:00+00:00
+zapplyjobs,zapplyjobs,2.0,"Zapotal Club, LLC",zapotal club,0.4545,zapplyjobs,1.0,2024-01-29 00:00:00+00:00,2024-01-29 00:00:00+00:00
+zapplyjobs,zapplyjobs,3.0,"Zapata Quantum, Inc.",zapata quantum,0.25,zapplyjobs,1.0,2026-04-07 00:00:00+00:00,2026-04-07 00:00:00+00:00
