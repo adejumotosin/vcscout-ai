@@ -11,7 +11,7 @@ from .service import get_ranked_startups
 
 app = FastAPI(
     title="VCScout AI API",
-    version="0.5.0",
+    version="0.5.1",
     description="Alternative-data venture intelligence API for engineering momentum, website-derived commercial maturity, historical funding-pattern ranking and diligence research.",
 )
 
@@ -67,8 +67,8 @@ def startups(
 ) -> list[dict]:
     df, _ = get_ranked_startups(force_refresh=refresh)
     filtered = df[df["vc_scout_score"] >= min_score]
-    if "commercial_momentum_score" in filtered.columns and min_commercial_score > 0:
-        filtered = filtered[filtered["commercial_momentum_score"] >= min_commercial_score]
+    if "commercial_maturity_score" in filtered.columns and min_commercial_score > 0:
+        filtered = filtered[filtered["commercial_maturity_score"] >= min_commercial_score]
     if "funding_pattern_index" in filtered.columns and min_pattern_index > 0:
         filtered = filtered[filtered["funding_pattern_index"] >= min_pattern_index]
     if sector:
@@ -80,7 +80,7 @@ def startups(
 
     cols = [
         "name", "description", "sector", "stage", "geography", "vc_scout_score",
-        "commercial_momentum_score", "commercial_signal_count", "commercial_signal_status",
+        "commercial_maturity_score", "commercial_momentum_score", "commercial_signal_count", "commercial_signal_status",
         "pricing_signal", "customer_evidence_signal", "enterprise_signal", "careers_signal",
         "security_signal", "integrations_signal", "developer_docs_signal", "self_serve_signal",
         "sales_motion_signal", "funding_pattern_index", "funding_pattern_model_status",
