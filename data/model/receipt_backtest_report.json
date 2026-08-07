@@ -7,15 +7,15 @@
   "unique_companies": 48,
   "positive_rows": 48,
   "control_rows": 48,
-  "out_of_fold_model": {
-    "roc_auc": 0.6252,
-    "average_precision": 0.6583,
+  "engineering_only_model": {
+    "roc_auc": 0.6261,
+    "average_precision": 0.6585,
     "roc_auc_95_ci": {
       "method": "company-cluster bootstrap",
       "iterations": 2000,
-      "lower_95": 0.5269,
-      "median": 0.6276,
-      "upper_95": 0.7268
+      "lower_95": 0.5282,
+      "median": 0.6285,
+      "upper_95": 0.7262
     },
     "folds": [
       {
@@ -36,25 +36,75 @@
         "fold": 3,
         "rows": 20,
         "companies": 10,
-        "roc_auc": 0.71,
-        "average_precision": 0.7954
+        "roc_auc": 0.7,
+        "average_precision": 0.7925
       },
       {
         "fold": 4,
         "rows": 18,
         "companies": 9,
         "roc_auc": 0.5926,
-        "average_precision": 0.7149
+        "average_precision": 0.7145
       },
       {
         "fold": 5,
         "rows": 18,
         "companies": 9,
-        "roc_auc": 0.6235,
-        "average_precision": 0.6523
+        "roc_auc": 0.6111,
+        "average_precision": 0.6417
       }
     ]
   },
+  "expanded_engineering_product_community_model": {
+    "roc_auc": 0.6274,
+    "average_precision": 0.6321,
+    "roc_auc_95_ci": {
+      "method": "company-cluster bootstrap",
+      "iterations": 2000,
+      "lower_95": 0.5208,
+      "median": 0.6298,
+      "upper_95": 0.7335
+    },
+    "folds": [
+      {
+        "fold": 1,
+        "rows": 20,
+        "companies": 10,
+        "roc_auc": 0.585,
+        "average_precision": 0.5908
+      },
+      {
+        "fold": 2,
+        "rows": 20,
+        "companies": 10,
+        "roc_auc": 0.6,
+        "average_precision": 0.6241
+      },
+      {
+        "fold": 3,
+        "rows": 20,
+        "companies": 10,
+        "roc_auc": 0.7,
+        "average_precision": 0.8146
+      },
+      {
+        "fold": 4,
+        "rows": 18,
+        "companies": 9,
+        "roc_auc": 0.642,
+        "average_precision": 0.7257
+      },
+      {
+        "fold": 5,
+        "rows": 18,
+        "companies": 9,
+        "roc_auc": 0.6173,
+        "average_precision": 0.5911
+      }
+    ]
+  },
+  "auc_improvement_vs_engineering_only": 0.0013,
+  "ap_improvement_vs_engineering_only": -0.0264,
   "existing_vc_scout_score": {
     "roc_auc": 0.4946,
     "average_precision": 0.5393
@@ -92,6 +142,46 @@
       "funding_window_win_rate": 0.4792,
       "ties": 4
     },
+    "releases_30d": {
+      "pairs": 48,
+      "funding_window_mean": 2.0417,
+      "control_window_mean": 2.2917,
+      "mean_difference": -0.25,
+      "funding_window_win_rate": 0.2292,
+      "ties": 22
+    },
+    "issues_opened_30d": {
+      "pairs": 48,
+      "funding_window_mean": 88.3542,
+      "control_window_mean": 83.6458,
+      "mean_difference": 4.7083,
+      "funding_window_win_rate": 0.4792,
+      "ties": 8
+    },
+    "issues_closed_30d": {
+      "pairs": 48,
+      "funding_window_mean": 69.2292,
+      "control_window_mean": 63.8125,
+      "mean_difference": 5.4167,
+      "funding_window_win_rate": 0.4375,
+      "ties": 10
+    },
+    "prs_merged_30d": {
+      "pairs": 48,
+      "funding_window_mean": 131.1458,
+      "control_window_mean": 116.8958,
+      "mean_difference": 14.25,
+      "funding_window_win_rate": 0.4792,
+      "ties": 9
+    },
+    "community_throughput_30d": {
+      "pairs": 48,
+      "funding_window_mean": 200.375,
+      "control_window_mean": 180.7083,
+      "mean_difference": 19.6667,
+      "funding_window_win_rate": 0.5417,
+      "ties": 5
+    },
     "vc_scout_score": {
       "pairs": 48,
       "funding_window_mean": 51.0854,
@@ -102,12 +192,14 @@
     }
   },
   "historical_pattern_ranker_exported": true,
+  "ranker_version": 2,
   "probability_calibrated": false,
   "production_probability_eligible": false,
   "caveats": [
     "This is a matched case-control study, so the positive base rate is artificial and predicted values are ranking scores, not real-world funding probabilities.",
+    "All added product/community features are reconstructed from timestamps available before each historical snapshot to avoid hindsight leakage.",
+    "Current web traffic, employee counts and present-day company metadata are intentionally excluded from this historical test because they would leak future information unless archival snapshots are available.",
     "The listed GitHub repository is a public engineering proxy; some companies build primarily in private repositories.",
-    "A 42-day pre-event snapshot is pre-specified from the public 3-6 week lead-time hypothesis and is not optimized on this sample.",
     "Control windows can contain unobserved financing or other material events not present in the validated-receipts ledger."
   ]
 }
