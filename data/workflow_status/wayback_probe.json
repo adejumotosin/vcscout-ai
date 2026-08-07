@@ -1,0 +1,109 @@
+{
+  "recorded_at": "2026-08-07T05:56:21.737832+00:00",
+  "successful_cases": 3,
+  "cases": [
+    {
+      "company": "Strapi",
+      "url": "https://strapi.io/",
+      "to": "20210812000000",
+      "status": "ok",
+      "captures": [
+        {
+          "timestamp": "20210810091458",
+          "original": "https://strapi.io/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        },
+        {
+          "timestamp": "20210811190043",
+          "original": "https://strapi.io/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        },
+        {
+          "timestamp": "20210811192031",
+          "original": "https://strapi.io/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        }
+      ],
+      "attempts": [
+        {
+          "url": "https://strapi.io/",
+          "error": "HTTPSConnectionPool(host='web.archive.org', port=443): Read timed out. (read timeout=8)"
+        },
+        {
+          "url": "http://strapi.io/",
+          "status_code": 200,
+          "body_prefix": "[[\"timestamp\",\"original\",\"statuscode\",\"mimetype\"],\n[\"20210810091458\",\"https://strapi.io/\",\"200\",\"text/html\"],\n[\"20210811190043\",\"https://strapi.io/\",\"200\",\"text/html\"],\n[\"202108111"
+        }
+      ]
+    },
+    {
+      "company": "PostHog",
+      "url": "https://posthog.com/",
+      "to": "20210831000000",
+      "status": "ok",
+      "captures": [
+        {
+          "timestamp": "20210811232149",
+          "original": "https://posthog.com/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        },
+        {
+          "timestamp": "20210811234119",
+          "original": "https://posthog.com/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        },
+        {
+          "timestamp": "20210822030309",
+          "original": "https://posthog.com/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        }
+      ],
+      "attempts": [
+        {
+          "url": "https://posthog.com/",
+          "status_code": 200,
+          "body_prefix": "[[\"timestamp\",\"original\",\"statuscode\",\"mimetype\"],\n[\"20210811232149\",\"https://posthog.com/\",\"200\",\"text/html\"],\n[\"20210811234119\",\"https://posthog.com/\",\"200\",\"text/html\"],\n[\"20210"
+        }
+      ]
+    },
+    {
+      "company": "n8n",
+      "url": "https://n8n.io/",
+      "to": "20211027000000",
+      "status": "ok",
+      "captures": [
+        {
+          "timestamp": "20211021205948",
+          "original": "https://n8n.io/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        },
+        {
+          "timestamp": "20211021215307",
+          "original": "https://n8n.io:443/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        },
+        {
+          "timestamp": "20211022181417",
+          "original": "https://n8n.io/",
+          "statuscode": "200",
+          "mimetype": "text/html"
+        }
+      ],
+      "attempts": [
+        {
+          "url": "https://n8n.io/",
+          "status_code": 200,
+          "body_prefix": "[[\"timestamp\",\"original\",\"statuscode\",\"mimetype\"],\n[\"20211021205948\",\"https://n8n.io/\",\"200\",\"text/html\"],\n[\"20211021215307\",\"https://n8n.io:443/\",\"200\",\"text/html\"],\n[\"20211022181"
+        }
+      ]
+    }
+  ]
+}
