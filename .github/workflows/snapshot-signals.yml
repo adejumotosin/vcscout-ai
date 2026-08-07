@@ -1,0 +1,43 @@
+name: Snapshot VCScout signals
+
+on:
+  schedule:
+    - cron: "20 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install runtime dependencies
+        run: pip install -r requirements.txt
+      - name: Backfill public historical panel
+        run: python scripts/import_gitdealflow_history.py
+      - name: Snapshot current signal universe
+        run: python scripts/snapshot_signals.py
+      - name: Rebuild labels when funding events exist
+        run: |
+          if [ -f data/funding_events/sec_form_d_events.csv ]; then
+            python scripts/build_funding_labels.py
+          fi
+      - name: Commit snapshot when data changed
+        run: |
+          if git diff --quiet -- data/history/ data/training/; then
+            echo "No signal-history changes to commit."
+            exit 0
+          fi
+          git config user.name "vcscout-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/history/ data/training/ || true
+          git commit -m "data: snapshot weekly VCScout signals"
+          git push

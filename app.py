@@ -9,12 +9,12 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / "src"))
 
 from vcscout.api import app  # noqa: E402
-from vcscout.web import DASHBOARD_HTML  # noqa: E402
+from vcscout.web_v2 import DASHBOARD_HTML  # noqa: E402
 
 
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
 def dashboard() -> HTMLResponse:
-    """Serve the Vercel-native VCScout dashboard."""
+    """Serve the Vercel-native VCScout Phase 2 dashboard."""
     return HTMLResponse(
         content=DASHBOARD_HTML,
         headers={
