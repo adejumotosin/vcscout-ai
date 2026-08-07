@@ -1,5 +1,5 @@
-# Temporary one-shot commercial-signal pilot; remove after validation.
-name: Pilot commercial signals
+# Temporary one-shot historical commercial-signal pilot; remove after validation.
+name: Pilot historical commercial signals
 
 on:
   push:
@@ -17,7 +17,7 @@ concurrency:
 jobs:
   commercial-pilot:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,22 +27,22 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install dependencies
-        run: pip install -e '.[dev]'
+        run: pip install -e '.[dev,ml]'
       - name: Run tests
         run: pytest -q
-      - name: Snapshot 60 live company websites
-        run: python scripts/snapshot_commercial_signals.py --limit 60 --workers 8 --timeout 12
       - name: Build 6-company archived commercial pilot
         env:
           GH_PUBLIC_TOKEN: ${{ github.token }}
-        run: python scripts/build_commercial_backtest.py --limit 6 --max-capture-age-days 120
+        run: python scripts/build_commercial_backtest.py --limit 6 --max-capture-age-days 120 --timeout 8 --workers 4
+      - name: Evaluate pilot when at least three complete pairs exist
+        run: python scripts/evaluate_multimodal_backtest.py --minimum-companies 3 || echo "Pilot does not yet have enough complete pairs for grouped evaluation."
       - name: Commit pilot data and audit
         run: |
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/training/commercial_backtest_features.csv \
                   data/workflow_status/commercial_backtest_build.csv \
-                  data/commercial/live_commercial_signals.csv \
-                  data/workflow_status/commercial_live_snapshot.csv
-          git commit -m "data: pilot commercial signal layer" || true
+                  data/training/multimodal_backtest_predictions.csv \
+                  data/model/multimodal_backtest_report.json 2>/dev/null || true
+          git commit -m "data: pilot historical commercial validation" || true
           git push
