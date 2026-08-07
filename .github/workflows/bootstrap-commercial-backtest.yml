@@ -30,12 +30,12 @@ jobs:
         run: pip install -e '.[dev]'
       - name: Run tests
         run: pytest -q
+      - name: Snapshot 60 live company websites
+        run: python scripts/snapshot_commercial_signals.py --limit 60 --workers 8 --timeout 12
       - name: Build 6-company archived commercial pilot
         env:
           GH_PUBLIC_TOKEN: ${{ github.token }}
         run: python scripts/build_commercial_backtest.py --limit 6 --max-capture-age-days 120
-      - name: Snapshot 60 live company websites
-        run: python scripts/snapshot_commercial_signals.py --limit 60 --workers 8 --timeout 12
       - name: Commit pilot data and audit
         run: |
           git config user.name "vcscout-bot"
