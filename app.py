@@ -22,8 +22,29 @@ def _dashboard_html() -> str:
         '<a class="ghost" href="/backtest">Backtest ↗</a><a class="ghost" href="/docs" target="_blank">API Docs ↗</a>',
     )
     html = html.replace(
+        'grid-template-columns:1.55fr repeat(3,1fr) .8fr;',
+        'grid-template-columns:1.4fr repeat(4,1fr) .8fr;',
+    )
+    html = html.replace(
+        '</select></section>',
+        '</select><select id="minCommercial" class="field"><option value="0">Commercial ≥ 0</option><option value="20">Commercial ≥ 20</option><option value="40">Commercial ≥ 40</option><option value="60">Commercial ≥ 60</option><option value="80">Commercial ≥ 80</option></select></section>',
+        1,
+    )
+    html = html.replace(
         '<th>#</th><th>Company</th><th>Scout</th><th>Funding 90d</th>',
         '<th>#</th><th>Company</th><th>Scout</th><th>Commercial maturity</th><th>Pattern</th><th>Funding 90d</th>',
+    )
+    html = html.replace(
+        "min=Number($('minScore').value||0);filtered=",
+        "min=Number($('minScore').value||0),cm=Number($('minCommercial').value||0);filtered=",
+    )
+    html = html.replace(
+        '&&Number(x.vc_scout_score)>=min);render()',
+        '&&Number(x.vc_scout_score)>=min&&(!cm||Number(x.commercial_maturity_score)>=cm));render()',
+    )
+    html = html.replace(
+        "['search','sector','stage','geo','minScore']",
+        "['search','sector','stage','geo','minScore','minCommercial']",
     )
     html = html.replace(
         'function probabilityCell(x){',
