@@ -14,6 +14,7 @@ from vcscout.scoring import score_startups  # noqa: E402
 
 DATA = ROOT / "data" / "training" / "receipt_backtest_features.csv"
 REPORT = ROOT / "data" / "model" / "receipt_backtest_report.json"
+RANKER = ROOT / "data" / "model" / "funding_pattern_ranker.json"
 PREDICTIONS = ROOT / "data" / "training" / "receipt_backtest_predictions.csv"
 
 FEATURES = [
@@ -54,6 +55,27 @@ def _paired_summary(frame: pd.DataFrame) -> dict:
             "ties": int((diff == 0).sum()) if len(pair) else 0,
         }
     return summaries
+
+
+def _group_bootstrap_auc(y: np.ndarray, pred: np.ndarray, groups: np.ndarray, iterations: int = 2000) -> dict:
+    from sklearn.metrics import roc_auc_score
+
+    rng = np.random.default_rng(42)
+    unique = np.unique(groups)
+    by_group = {group: np.flatnonzero(groups == group) for group in unique}
+    values: list[float] = []
+    for _ in range(iterations):
+        sampled = rng.choice(unique, size=len(unique), replace=True)
+        idx = np.concatenate([by_group[group] for group in sampled])
+        values.append(float(roc_auc_score(y[idx], pred[idx])))
+    lo, mid, hi = np.quantile(values, [0.025, 0.5, 0.975])
+    return {
+        "method": "company-cluster bootstrap",
+        "iterations": iterations,
+        "lower_95": round(float(lo), 4),
+        "median": round(float(mid), 4),
+        "upper_95": round(float(hi), 4),
+    }
 
 
 def main() -> None:
@@ -118,6 +140,7 @@ def main() -> None:
     overall_ap = float(average_precision_score(y[valid], oof[valid]))
     scout_auc = float(roc_auc_score(y, frame["vc_scout_score"].astype(float)))
     scout_ap = float(average_precision_score(y, frame["vc_scout_score"].astype(float)))
+    auc_ci = _group_bootstrap_auc(y[valid], oof[valid], groups[valid])
 
     output = frame[
         ["company", "github_owner", "github_repo", "event_date", "snapshot_date", "window_name", "raised_funding_within_90d", "vc_scout_score"]
@@ -125,6 +148,37 @@ def main() -> None:
     output["backtest_oof_rank_score"] = oof
     PREDICTIONS.parent.mkdir(parents=True, exist_ok=True)
     output.to_csv(PREDICTIONS, index=False)
+
+    # Fit one final ranker on the full historical case-control sample. Its sigmoid output is
+    # deliberately not exposed as a probability. Production converts it to a cross-sectional
+    # percentile named Historical Funding Pattern Index.
+    final_model = Pipeline(
+        [
+            ("scale", StandardScaler()),
+            ("model", LogisticRegression(C=0.5, max_iter=2000, class_weight="balanced", random_state=42)),
+        ]
+    )
+    final_model.fit(x, y)
+    scaler = final_model.named_steps["scale"]
+    logistic = final_model.named_steps["model"]
+    ranker_artifact = {
+        "artifact_type": "historical_case_control_ranker",
+        "version": 1,
+        "feature_names": list(x.columns),
+        "feature_mean": [float(v) for v in scaler.mean_],
+        "feature_scale": [float(v) for v in scaler.scale_],
+        "coefficients": [float(v) for v in logistic.coef_[0]],
+        "intercept": float(logistic.intercept_[0]),
+        "training_rows": int(len(frame)),
+        "training_companies": int(unique_groups),
+        "validation_roc_auc": round(overall_auc, 4),
+        "validation_average_precision": round(overall_ap, 4),
+        "validation_auc_95_ci": auc_ci,
+        "probability_calibrated": False,
+        "output_semantics": "Use the linear/logistic output for ranking only; convert to a percentile within the current candidate universe. Do not present it as funding probability.",
+    }
+    RANKER.parent.mkdir(parents=True, exist_ok=True)
+    RANKER.write_text(json.dumps(ranker_artifact, indent=2))
 
     report = {
         "status": "completed",
@@ -138,6 +192,7 @@ def main() -> None:
         "out_of_fold_model": {
             "roc_auc": round(overall_auc, 4),
             "average_precision": round(overall_ap, 4),
+            "roc_auc_95_ci": auc_ci,
             "folds": fold_rows,
         },
         "existing_vc_scout_score": {
@@ -145,6 +200,7 @@ def main() -> None:
             "average_precision": round(scout_ap, 4),
         },
         "paired_signal_summary": _paired_summary(frame),
+        "historical_pattern_ranker_exported": True,
         "probability_calibrated": False,
         "production_probability_eligible": False,
         "caveats": [
@@ -154,7 +210,6 @@ def main() -> None:
             "Control windows can contain unobserved financing or other material events not present in the validated-receipts ledger.",
         ],
     }
-    REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, indent=2))
     print(json.dumps(report, indent=2))
 
