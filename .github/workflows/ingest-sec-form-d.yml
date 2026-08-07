@@ -1,0 +1,62 @@
+name: Ingest SEC Form D
+
+on:
+  workflow_dispatch:
+    inputs:
+      year:
+        description: "SEC Form D year"
+        required: true
+        default: "2026"
+      quarter:
+        description: "Quarter (1-4)"
+        required: true
+        default: "2"
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e '.[dev,ml]'
+      - name: Require SEC identity secret
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+        run: |
+          if [ -z "$SEC_USER_AGENT" ]; then
+            echo "Create repository secret SEC_USER_AGENT with a descriptive SEC-compliant identity string."
+            exit 1
+          fi
+      - name: Ingest SEC quarter
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+        run: python scripts/ingest_sec_form_d.py --year "${{ inputs.year }}" --quarter "${{ inputs.quarter }}" --user-agent "$SEC_USER_AGENT"
+      - name: Rebuild labels when history exists
+        run: |
+          if [ -f data/history/signals_history.csv ]; then
+            python scripts/build_funding_labels.py
+          fi
+      - name: Train model when safety gates pass
+        run: |
+          if [ -f data/training/funding_labels.csv ]; then
+            python scripts/train_funding_model.py || echo "Model safety gate not yet satisfied; labels were still saved."
+          fi
+      - name: Commit outcome data and model changes
+        run: |
+          if git diff --quiet -- data/; then
+            echo "No data changes to commit."
+            exit 0
+          fi
+          git config user.name "vcscout-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "data: ingest SEC Form D outcomes"
+          git push
