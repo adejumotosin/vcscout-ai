@@ -1,5 +1,5 @@
-# Temporary one-shot entity-resolution audit; remove after report is committed.
-name: Audit SEC entity resolution candidates
+# Temporary one-shot validated-receipts import; remove after data is committed.
+name: Import validated funding receipts
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  audit:
+  import:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,13 +22,15 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install dependencies
-        run: pip install -e '.[dev]'
-      - name: Build candidate legal-entity audit
-        run: python scripts/audit_entity_matches.py
-      - name: Commit audit reports
+        run: |
+          pip install -e '.[dev]'
+          pip install 'beautifulsoup4>=4.12,<5'
+      - name: Import public validated receipts
+        run: python scripts/import_validated_receipts.py
+      - name: Commit receipt datasets
         run: |
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/workflow_status/entity_match_audit.csv data/workflow_status/entity_match_high_confidence.csv
-          git commit -m "data: audit SEC entity match candidates" || true
+          git add data/funding_events/gitdealflow_validated_receipts.csv data/funding_events/gitdealflow_validated_funding_receipts.csv
+          git commit -m "data: import validated GitDealFlow funding receipts" || true
           git push
