@@ -3,14 +3,15 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import PlainTextResponse
 
+from .pattern import historical_pattern_status
 from .probability import model_status
 from .research import build_research_report, research_report_markdown
 from .service import get_ranked_startups
 
 app = FastAPI(
     title="VCScout AI API",
-    version="0.3.0",
-    description="Alternative-data venture intelligence API for engineering momentum, outcome modelling and diligence research.",
+    version="0.4.0",
+    description="Alternative-data venture intelligence API for engineering momentum, historical funding-pattern ranking and diligence research.",
 )
 
 
@@ -36,7 +37,14 @@ def meta(refresh: bool = False) -> dict:
 
 @app.get("/model")
 def funding_model() -> dict:
+    """Prospective 90-day probability model status."""
     return model_status()
+
+
+@app.get("/pattern-model")
+def funding_pattern_model() -> dict:
+    """Historical matched case-control ranker validation and semantics."""
+    return historical_pattern_status()
 
 
 @app.get("/startups")
@@ -46,10 +54,13 @@ def startups(
     geography: str | None = None,
     stage: str | None = None,
     min_score: float = Query(0, ge=0, le=100),
+    min_pattern_index: float = Query(0, ge=0, le=100),
     refresh: bool = False,
 ) -> list[dict]:
     df, _ = get_ranked_startups(force_refresh=refresh)
     filtered = df[df["vc_scout_score"] >= min_score]
+    if "funding_pattern_index" in filtered.columns and min_pattern_index > 0:
+        filtered = filtered[filtered["funding_pattern_index"] >= min_pattern_index]
     if sector:
         filtered = filtered[filtered["sector"].str.lower() == sector.lower()]
     if geography:
@@ -59,6 +70,7 @@ def startups(
 
     cols = [
         "name", "description", "sector", "stage", "geography", "vc_scout_score",
+        "funding_pattern_index", "funding_pattern_model_status",
         "funding_probability_90d", "funding_model_status", "momentum_flag", "top_driver",
         "risk_flag", "commit_velocity_14d", "commit_velocity_change", "contributors",
         "contributor_growth", "new_repos_30d", "signal_type", "github_url",
@@ -107,6 +119,7 @@ def watchlist_brief(names: str = Query(..., description="Comma-separated organis
         "count": len(reports),
         "missing": missing,
         "source_period": metadata.get("period"),
+        "funding_pattern_model": historical_pattern_status(),
         "funding_model": model_status(),
         "reports": reports,
     }
