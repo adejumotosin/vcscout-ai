@@ -1,13 +1,13 @@
-# VCScout AI — Historical Funding and Alternative-Data Validation
+# VCScout AI - Validation and Model Governance
 
-VCScout deliberately separates four different outputs:
+VCScout deliberately separates four outputs:
 
-1. **VC Scout Score** — an explainable engineering-momentum heuristic.
-2. **Commercial Maturity Score** — a transparent public-website maturity heuristic based on visible go-to-market infrastructure.
-3. **Historical Funding Pattern Index** — a relative percentile rank from a historical matched case-control model.
-4. **90-day Funding Probability** — a future prospectively calibrated probability model. This remains withheld until the data requirements are satisfied.
+1. **VC Scout Score** - an explainable engineering-momentum heuristic.
+2. **Commercial Maturity Score** - a transparent public-website maturity heuristic based on visible go-to-market infrastructure.
+3. **Historical Funding Pattern Index** - a relative percentile rank from a historical matched case-control model.
+4. **90-day Funding Probability** - a future prospectively calibrated probability model. This remains withheld until the data requirements are satisfied.
 
-The distinction matters. A maturity score or ranking model can contain useful sourcing information without being a calibrated probability model.
+A useful sourcing score or historical rank does not automatically justify a probability claim. The system keeps these outputs separate in both the API and user interface.
 
 ## 1. Outcome sources
 
@@ -32,33 +32,33 @@ The prospective labelling pipeline uses:
 - right-censor handling;
 - chronological validation requirements before any probability can be published.
 
-At the current stage, the public 2025–2026 engineering panel does not contain enough safely matched positive financing events. VCScout therefore does **not** fit or publish a 90-day probability from those labels.
+The current 2025-2026 public engineering panel still does not contain enough safely matched positive financing events. VCScout therefore does **not** publish a 90-day funding probability from these labels.
 
 ### Validated public funding receipts
 
-For historical signal validation, VCScout also imports the public VC Deal Flow Signal Underwriting Receipts ledger. The ledger ties documented financing events to specific public GitHub repositories and provides a historical set of known fundraising outcomes.
+For historical signal validation, VCScout also imports the public VC Deal Flow Signal Underwriting Receipts ledger. The ledger ties documented financing events to public GitHub repositories and provides a historical set of known fundraising outcomes.
 
-This source is used for a **historical ranking backtest only**. It is not used to pretend that the case-control class frequency is the real-world probability of fundraising.
+This source is used for a **historical ranking backtest only**. It is not used to infer a real-world fundraising base rate.
 
 ## 2. Historical engineering reconstruction
 
-For each validated funded company, VCScout reconstructs public GitHub commit activity at two pre-specified points:
+For each validated funded company, VCScout reconstructs public GitHub activity at two pre-specified points:
 
 - **Positive window:** 42 days before the documented funding event.
 - **Matched control window:** 180 days before the same funding event.
 
 The 42-day point follows the project's pre-specified three-to-six-week lead-time hypothesis rather than being optimized after seeing the outcomes.
 
-Features reconstructed from the GitHub API include:
+Core engineering features include:
 
 - 14-day commit count;
-- change in commit count versus the prior 14-day window;
+- commit-count change versus the prior 14-day window;
 - unique contributor count;
 - contributor-count growth;
 - positive-acceleration flags;
 - dual commit/contributor acceleration.
 
-The final historical engineering dataset contains:
+The final matched dataset contains:
 
 - **48 unique funded companies**;
 - **48 pre-funding windows**;
@@ -67,33 +67,25 @@ The final historical engineering dataset contains:
 
 ## 3. Validation design
 
-The historical ranker is a regularized logistic model evaluated using **Stratified Group K-Fold cross-validation**.
+The historical rankers use regularized logistic regression evaluated with **Stratified Group K-Fold cross-validation**.
 
-The grouping variable is GitHub organisation. This prevents the same company from appearing in both the training and test side of a fold.
+The grouping variable is GitHub organisation, which prevents the same company from appearing in both train and test partitions of a fold. Reported validation metrics are calculated from out-of-fold predictions only.
 
-Validation metrics are computed from out-of-fold predictions only.
+A company-cluster bootstrap with 2,000 iterations is used to quantify uncertainty in ROC-AUC.
 
-A company-cluster bootstrap is used to quantify uncertainty in ROC-AUC.
+## 4. Historical model results
 
-## 4. Engineering-model results
+### Production engineering-only ranker
 
-### Learned historical ranker
+The current production Historical Funding Pattern Index retains the original engineering-only ranker:
 
-| Metric | Result |
+| Metric | Production artifact |
 | --- | ---: |
 | Out-of-fold ROC-AUC | **0.6252** |
 | Average Precision | **0.6583** |
-| ROC-AUC 95% company-cluster bootstrap interval | **0.5269–0.7268** |
+| ROC-AUC 95% bootstrap interval | **0.5269-0.7268** |
 
-Fold ROC-AUC values were approximately:
-
-- 0.690
-- 0.600
-- 0.710
-- 0.593
-- 0.624
-
-This is **modest directional ranking signal**, not production-grade underwriting performance.
+A subsequent rerun of the engineering-only specification produced ROC-AUC **0.6261** and Average Precision **0.6585**, which was not materially better than the incumbent.
 
 ### Original VC Scout Score on the same funding task
 
@@ -102,15 +94,61 @@ This is **modest directional ranking signal**, not production-grade underwriting
 | ROC-AUC | **0.4946** |
 | Average Precision | **0.5393** |
 
-This result is important: the original hand-weighted VC Scout Score should remain an **engineering-momentum score**, not be relabelled as a funding predictor.
+This is why the VC Scout Score remains an **engineering-momentum score**, not a funding predictor.
 
-The learned funding-pattern ranker is therefore kept as a separate model and output.
+### Product/community challenger
 
-## 5. Historical Funding Pattern Index
+VCScout reconstructed additional timestamp-safe GitHub signals before each historical snapshot:
+
+- releases in the prior 30 and 90 days;
+- issues opened in the prior 30 days;
+- issues closed in the prior 30 days;
+- pull requests merged in the prior 30 days;
+- combined community throughput.
+
+The expanded model produced:
+
+| Model | ROC-AUC | Average Precision |
+| --- | ---: | ---: |
+| Engineering-only rerun | **0.6261** | **0.6585** |
+| Engineering + product/community | 0.6274 | 0.6321 |
+
+The challenger gained only **0.0013 ROC-AUC** versus the engineering-only rerun while losing **0.0264 Average Precision**. It was therefore rejected.
+
+The experiment remains versioned in the repository because negative results are useful evidence. The added signals may still help research and diligence even though they did not improve this funding-ranking task.
+
+## 5. Production model promotion policy
+
+VCScout now enforces model promotion in code rather than relying on manual judgement.
+
+A challenger may replace the production Historical Funding Pattern Index only if all of the following are true:
+
+- ROC-AUC improves by at least **0.02** versus the incumbent;
+- Average Precision improves by at least **0.01** versus the incumbent;
+- both improvements occur in grouped out-of-sample validation;
+- every feature required by the challenger is available in the live inference path.
+
+The current governance decision is:
+
+```text
+Production action: retain incumbent
+Incumbent ROC-AUC: 0.6252
+Incumbent Average Precision: 0.6583
+Engineering-only challenger AUC lift: +0.0009
+Engineering-only challenger AP lift: +0.0002
+Expanded challenger AUC lift: +0.0022
+Expanded challenger AP lift: -0.0262
+```
+
+Neither challenger clears the material-lift thresholds. The expanded challenger is also not live-feature compatible because the production Pattern Index does not yet calculate historical community/release features for the live universe.
+
+The promotion rule is implemented in `src/vcscout/governance.py` and covered by automated tests.
+
+## 6. Historical Funding Pattern Index
 
 The production site loads the versioned historical ranker artifact and scores the current live startup universe.
 
-Rather than exposing the logistic output as a probability, VCScout converts the current scores into a **cross-sectional percentile**:
+Rather than exposing the logistic output as a probability, VCScout converts current scores into a cross-sectional percentile:
 
 ```text
 Historical Funding Pattern Index = percentile rank within the current live universe
@@ -118,16 +156,14 @@ Historical Funding Pattern Index = percentile rank within the current live unive
 
 Interpretation:
 
-- `90` means the company's current observable engineering pattern ranks around the 90th percentile of the current comparison universe under the historical ranker.
+- `90` means the company's observable engineering pattern ranks around the 90th percentile of the current comparison universe under the historical ranker.
 - `90` does **not** mean a 90% probability of raising funding.
 
-This preserves the useful ranking information without making an invalid probability claim.
+## 7. Commercial Maturity Score
 
-## 6. Commercial Maturity Score
+VCScout snapshots the public websites attached to the live source universe and records visible go-to-market infrastructure. The current stored production snapshot observed **273 of 369 tracked organisations**, approximately **74%** of the live universe.
 
-VCScout now snapshots the public websites attached to the live source universe and records visible go-to-market infrastructure. The current production snapshot successfully observed **273 of 369 tracked organisations**, or approximately **74%** of the live universe.
-
-The score is intentionally transparent. It is built from binary evidence for:
+The transparent score uses visible evidence for:
 
 - pricing;
 - customer or case-study evidence;
@@ -139,34 +175,29 @@ The score is intentionally transparent. It is built from binary evidence for:
 - self-serve signup or trial flows;
 - sales or demo motions.
 
-The weighted components sum to a 0–100 **Commercial Maturity Score**. The score is not revenue, ARR, bookings, customer count, valuation, or fundraising probability.
+The weighted components form a 0-100 **Commercial Maturity Score**. It is not revenue, ARR, bookings, valuation, customer count, funding probability, or verified commercial traction.
 
-Code-hosting and social-media URLs are excluded from website scoring so, for example, a GitHub profile cannot be mistaken for a commercial company website.
+Code-hosting and social-media URLs are excluded from website scoring. The snapshot is refreshed weekly and appended to dated history so future models can use genuine changes rather than one-time observations.
 
-The production snapshot is refreshed weekly and appended to a dated history. Once multiple distinct-date snapshots exist, VCScout can measure genuine changes in visible commercial maturity rather than inferring “momentum” from a single observation.
+## 8. Leakage-resistant commercial research
 
-## 7. Leakage-resistant commercial backtest design
+Present-day company fundamentals cannot safely be inserted into a 2021-2025 historical prediction test because that would leak future information.
 
-To test whether commercial website evidence improves the historical funding ranker, VCScout uses archived web pages rather than current websites.
-
-For each historical positive/control snapshot, the commercial backtest:
+For archived commercial research, VCScout therefore:
 
 1. resolves a company website from public repository or organisation metadata;
-2. queries Internet Archive captures only **on or before** the historical feature date;
-3. rejects captures that are older than the configured freshness limit;
-4. extracts the same transparent commercial features from the archived HTML;
-5. retains matched companies only when both historical windows are observed;
-6. compares engineering-only, commercial-only, and engineering-plus-commercial models using company-grouped out-of-sample validation.
+2. queries archived captures only on or before the historical feature date;
+3. rejects captures that are too old for the configured freshness limit;
+4. extracts the same transparent commercial features from archived HTML;
+5. keeps historical and current observations separate.
 
-This design avoids using a company's present-day website to predict a past financing event.
+Archived web coverage is incomplete and non-random, so no archived commercial challenger is promoted without sufficient matched coverage and measurable out-of-sample lift.
 
-The Internet Archive coverage probe successfully found pre-snapshot captures for Strapi, PostHog and n8n. The full multimodal result is not promoted into the production funding ranker unless it produces sufficient matched coverage and measurable out-of-sample lift.
-
-## 8. Why the 90-day probability remains locked
+## 9. Why the 90-day probability remains locked
 
 A real probability requires population-calibrated prospective outcomes. A matched case-control backtest deliberately changes the positive base rate, so its logistic outputs cannot be interpreted as real-world probabilities.
 
-VCScout will only activate the probability field after the prospective dataset has:
+VCScout will activate the probability field only after the prospective dataset has:
 
 - enough uncensored observations;
 - enough positive financing events;
@@ -175,22 +206,22 @@ VCScout will only activate the probability field after the prospective dataset h
 - probability calibration;
 - acceptable discrimination and calibration metrics.
 
-Until then, the API returns a null probability and a model status explaining why it is withheld.
+Until then, the API returns a null probability and a model-status explanation.
 
-## 9. Known limitations
+## 10. Known limitations
 
 - Public repositories are incomplete proxies for total engineering activity.
 - Some startups do most development in private repositories.
 - Some open-source organisations are not directly investable corporate entities.
-- Public website maturity does not establish commercial traction or revenue.
-- Some company websites are missing, unavailable or block automated retrieval.
+- Public website maturity does not establish revenue or verified commercial traction.
+- Company websites may be missing, unavailable, or block automated retrieval.
 - Archived website availability is incomplete and non-random.
 - Control windows may contain unobserved material events not present in the validated funding ledger.
 - The historical sample remains small.
-- Funding events are heterogeneous across stages, sectors and market regimes.
-- The current historical reconstruction does not fully recreate organisation-wide new-repository activity at each old snapshot.
+- Funding events are heterogeneous across stages, sectors, and market regimes.
+- Historical reconstruction does not fully recreate every organisation-wide signal at each old snapshot.
 
-## 10. Reproducibility
+## 11. Reproducibility
 
 Core scripts:
 
@@ -204,6 +235,14 @@ scripts/evaluate_multimodal_backtest.py
 scripts/ingest_sec_form_d.py
 scripts/build_funding_labels.py
 scripts/train_funding_model.py
+```
+
+Governance and runtime modules:
+
+```text
+src/vcscout/governance.py
+src/vcscout/pattern.py
+src/vcscout/probability.py
 ```
 
 Versioned artifacts:
@@ -227,4 +266,4 @@ GET /research/{startup_name}
 GET /backtest
 ```
 
-The public backtest page is available at `/backtest` on the deployed VCScout application.
+The public validation page is available at `/backtest` on the deployed VCScout application.
