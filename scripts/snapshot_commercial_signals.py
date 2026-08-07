@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 import sys
 sys.path.insert(0, str(ROOT / "src"))
 
-from vcscout.commercial import extract_commercial_signals  # noqa: E402
+from vcscout.commercial import extract_commercial_signals, is_company_website_url  # noqa: E402
 from vcscout.data import fetch_live_payload, flatten_startups  # noqa: E402
 
 OUTPUT = ROOT / "data" / "commercial" / "live_commercial_signals.csv"
@@ -27,14 +27,18 @@ def _fetch_one(row: dict[str, Any], timeout: int) -> tuple[dict[str, Any] | None
     base_status = {"name": name, "startup_key": startup_key, "website_url": url}
     if not url:
         return None, {**base_status, "status": "no_website", "detail": ""}
+    if not is_company_website_url(url):
+        return None, {**base_status, "status": "excluded_non_company_host", "detail": url[:300]}
     try:
         response = requests.get(
             url,
             timeout=timeout,
             allow_redirects=True,
-            headers={"User-Agent": "VCScoutAI/0.4 commercial-snapshot"},
+            headers={"User-Agent": "VCScoutAI/0.5 commercial-snapshot"},
         )
         response.raise_for_status()
+        if not is_company_website_url(response.url):
+            return None, {**base_status, "status": "excluded_redirect_host", "detail": response.url[:300]}
         content_type = (response.headers.get("content-type") or "").lower()
         if "html" not in content_type and content_type:
             return None, {**base_status, "status": "non_html", "detail": content_type[:180]}
