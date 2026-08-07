@@ -6,7 +6,7 @@ from .service import get_ranked_startups
 
 app = FastAPI(
     title="VCScout AI API",
-    version="0.1.0",
+    version="0.2.0",
     description="Alternative-data sourcing API for ranking engineering momentum in venture-stage organisations.",
 )
 
@@ -17,8 +17,8 @@ def health() -> dict[str, str]:
 
 
 @app.get("/meta")
-def meta() -> dict:
-    _, metadata = get_ranked_startups()
+def meta(refresh: bool = False) -> dict:
+    _, metadata = get_ranked_startups(force_refresh=refresh)
     return metadata
 
 
@@ -29,8 +29,9 @@ def startups(
     geography: str | None = None,
     stage: str | None = None,
     min_score: float = Query(0, ge=0, le=100),
+    refresh: bool = False,
 ) -> list[dict]:
-    df, _ = get_ranked_startups()
+    df, _ = get_ranked_startups(force_refresh=refresh)
     filtered = df[df["vc_scout_score"] >= min_score]
     if sector:
         filtered = filtered[filtered["sector"].str.lower() == sector.lower()]
