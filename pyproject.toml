@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=70", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vcscout-ai"
+version = "0.1.0"
+description = "Alternative-data venture sourcing engine using public GitHub engineering signals"
+requires-python = ">=3.11"
+dependencies = [
+  "pandas>=2.2,<3",
+  "numpy>=1.26,<3",
+  "requests>=2.32,<3",
+  "streamlit>=1.39,<2",
+  "plotly>=5.24,<7",
+  "fastapi>=0.115,<1",
+  "uvicorn[standard]>=0.30,<1",
+  "scikit-learn>=1.5,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<9"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
