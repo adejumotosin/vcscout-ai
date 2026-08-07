@@ -1,6 +1,6 @@
 {
   "artifact_type": "historical_case_control_ranker",
-  "version": 2,
+  "version": 1,
   "feature_names": [
     "log_commit_velocity",
     "commit_velocity_change",
@@ -8,15 +8,7 @@
     "contributor_growth",
     "velocity_positive",
     "growth_positive",
-    "dual_acceleration",
-    "log_releases_30d",
-    "log_releases_90d",
-    "log_issues_opened_30d",
-    "log_issues_closed_30d",
-    "log_prs_merged_30d",
-    "log_community_throughput_30d",
-    "release_active",
-    "community_active"
+    "dual_acceleration"
   ],
   "feature_mean": [
     3.449830865083063,
@@ -25,15 +17,7 @@
     27.87284166666667,
     0.4270833333333333,
     0.3645833333333333,
-    0.28125,
-    0.800351753849025,
-    1.2914306395801562,
-    3.059339823707198,
-    2.7964672195045615,
-    3.302796713294565,
-    3.7876245739853727,
-    0.5416666666666666,
-    0.8333333333333334
+    0.28125
   ],
   "feature_scale": [
     1.9546270024738903,
@@ -42,93 +26,30 @@
     127.62822210749688,
     0.4946545862743236,
     0.4813131271728301,
-    0.4496092053105675,
-    0.8292529883841646,
-    1.2308671619151268,
-    2.033083428909867,
-    2.0060793850834155,
-    2.259129661895369,
-    2.2685168544804157,
-    0.49826086429589156,
-    0.372677996249965
+    0.4496092053105675
   ],
   "coefficients": [
-    0.2384065519566826,
-    -0.02928374769784974,
-    0.26251949701270394,
-    0.5193158495613053,
-    -0.5446553626522754,
-    0.07700079105710363,
-    -0.158673621258496,
-    -0.37329805774444413,
-    0.1958696823826086,
-    0.12701724455756658,
-    -0.06396987622810948,
-    -0.2163690404728162,
-    -0.14864502681667785,
-    0.23947374124653148,
-    0.23037929216592432
+    0.2549466105828731,
+    -0.03041932326768278,
+    0.16504387905865428,
+    0.6443788066786298,
+    -0.5392196629177959,
+    0.039366605183599614,
+    -0.19741801087896294
   ],
-  "intercept": 0.010156329691082587,
+  "intercept": 0.01355147298873834,
   "training_rows": 96,
   "training_companies": 48,
-  "validation_roc_auc": 0.6274,
-  "validation_average_precision": 0.6321,
+  "validation_roc_auc": 0.6252,
+  "validation_average_precision": 0.6583,
   "validation_auc_95_ci": {
     "method": "company-cluster bootstrap",
     "iterations": 2000,
-    "lower_95": 0.5208,
-    "median": 0.6298,
-    "upper_95": 0.7335
-  },
-  "engineering_only_validation": {
-    "roc_auc": 0.6261,
-    "average_precision": 0.6585,
-    "roc_auc_95_ci": {
-      "method": "company-cluster bootstrap",
-      "iterations": 2000,
-      "lower_95": 0.5282,
-      "median": 0.6285,
-      "upper_95": 0.7262
-    },
-    "folds": [
-      {
-        "fold": 1,
-        "rows": 20,
-        "companies": 10,
-        "roc_auc": 0.69,
-        "average_precision": 0.7363
-      },
-      {
-        "fold": 2,
-        "rows": 20,
-        "companies": 10,
-        "roc_auc": 0.6,
-        "average_precision": 0.621
-      },
-      {
-        "fold": 3,
-        "rows": 20,
-        "companies": 10,
-        "roc_auc": 0.7,
-        "average_precision": 0.7925
-      },
-      {
-        "fold": 4,
-        "rows": 18,
-        "companies": 9,
-        "roc_auc": 0.5926,
-        "average_precision": 0.7145
-      },
-      {
-        "fold": 5,
-        "rows": 18,
-        "companies": 9,
-        "roc_auc": 0.6111,
-        "average_precision": 0.6417
-      }
-    ]
+    "lower_95": 0.5269,
+    "median": 0.6276,
+    "upper_95": 0.7268
   },
   "probability_calibrated": false,
-  "output_semantics": "Use for ranking only; convert to a percentile within the current candidate universe. Do not present it as funding probability."
+  "selection_note": "Retained for production because the expanded product/community model did not materially improve ROC-AUC and reduced average precision in grouped out-of-sample validation.",
+  "output_semantics": "Use the linear/logistic output for ranking only; convert to a percentile within the current candidate universe. Do not present it as funding probability."
 }
