@@ -1,0 +1,54 @@
+{
+  "artifact_type": "historical_case_control_ranker",
+  "version": 1,
+  "feature_names": [
+    "log_commit_velocity",
+    "commit_velocity_change",
+    "log_contributors",
+    "contributor_growth",
+    "velocity_positive",
+    "growth_positive",
+    "dual_acceleration"
+  ],
+  "feature_mean": [
+    3.449830865083063,
+    31.351252083333335,
+    2.1623060584647393,
+    27.87284166666667,
+    0.4270833333333333,
+    0.3645833333333333,
+    0.28125
+  ],
+  "feature_scale": [
+    1.9546270024738903,
+    138.4466385719136,
+    1.3287837070873088,
+    127.62822210749688,
+    0.4946545862743236,
+    0.4813131271728301,
+    0.4496092053105675
+  ],
+  "coefficients": [
+    0.2549466105828731,
+    -0.03041932326768278,
+    0.16504387905865428,
+    0.6443788066786298,
+    -0.5392196629177959,
+    0.039366605183599614,
+    -0.19741801087896294
+  ],
+  "intercept": 0.01355147298873834,
+  "training_rows": 96,
+  "training_companies": 48,
+  "validation_roc_auc": 0.6252,
+  "validation_average_precision": 0.6583,
+  "validation_auc_95_ci": {
+    "method": "company-cluster bootstrap",
+    "iterations": 2000,
+    "lower_95": 0.5269,
+    "median": 0.6276,
+    "upper_95": 0.7268
+  },
+  "probability_calibrated": false,
+  "output_semantics": "Use the linear/logistic output for ranking only; convert to a percentile within the current candidate universe. Do not present it as funding probability."
+}
