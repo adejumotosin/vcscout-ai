@@ -5,6 +5,7 @@ from typing import Any
 
 import pandas as pd
 
+from .commercial import attach_commercial_momentum, commercial_data_status
 from .config import settings
 from .data import dataset_metadata, fetch_live_payload, flatten_startups
 from .pattern import attach_funding_pattern_index, historical_pattern_status
@@ -32,9 +33,11 @@ def get_ranked_startups(force_refresh: bool = False) -> tuple[pd.DataFrame, dict
     flat = flatten_startups(payload)
     scored = score_startups(flat)
     ranked = deduplicate_for_ranking(scored)
+    ranked = attach_commercial_momentum(ranked)
     ranked = attach_funding_pattern_index(ranked)
     ranked = attach_funding_probabilities(ranked)
     metadata = dataset_metadata(payload)
+    metadata["commercial_signals"] = commercial_data_status()
     metadata["funding_pattern_model"] = historical_pattern_status()
     metadata["funding_model"] = model_status()
     return ranked, metadata
