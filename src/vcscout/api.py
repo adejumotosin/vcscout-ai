@@ -3,6 +3,7 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import PlainTextResponse
 
+from .commercial import commercial_data_status
 from .pattern import historical_pattern_status
 from .probability import model_status
 from .research import build_research_report, research_report_markdown
@@ -10,8 +11,8 @@ from .service import get_ranked_startups
 
 app = FastAPI(
     title="VCScout AI API",
-    version="0.4.0",
-    description="Alternative-data venture intelligence API for engineering momentum, historical funding-pattern ranking and diligence research.",
+    version="0.5.0",
+    description="Alternative-data venture intelligence API for engineering momentum, website-derived commercial maturity, historical funding-pattern ranking and diligence research.",
 )
 
 
@@ -47,6 +48,12 @@ def funding_pattern_model() -> dict:
     return historical_pattern_status()
 
 
+@app.get("/commercial-signals")
+def commercial_signals() -> dict:
+    """Current public-website commercial-maturity dataset status."""
+    return commercial_data_status()
+
+
 @app.get("/startups")
 def startups(
     limit: int = Query(25, ge=1, le=200),
@@ -54,11 +61,14 @@ def startups(
     geography: str | None = None,
     stage: str | None = None,
     min_score: float = Query(0, ge=0, le=100),
+    min_commercial_score: float = Query(0, ge=0, le=100),
     min_pattern_index: float = Query(0, ge=0, le=100),
     refresh: bool = False,
 ) -> list[dict]:
     df, _ = get_ranked_startups(force_refresh=refresh)
     filtered = df[df["vc_scout_score"] >= min_score]
+    if "commercial_momentum_score" in filtered.columns and min_commercial_score > 0:
+        filtered = filtered[filtered["commercial_momentum_score"] >= min_commercial_score]
     if "funding_pattern_index" in filtered.columns and min_pattern_index > 0:
         filtered = filtered[filtered["funding_pattern_index"] >= min_pattern_index]
     if sector:
@@ -70,13 +80,17 @@ def startups(
 
     cols = [
         "name", "description", "sector", "stage", "geography", "vc_scout_score",
-        "funding_pattern_index", "funding_pattern_model_status",
+        "commercial_momentum_score", "commercial_signal_count", "commercial_signal_status",
+        "pricing_signal", "customer_evidence_signal", "enterprise_signal", "careers_signal",
+        "security_signal", "integrations_signal", "developer_docs_signal", "self_serve_signal",
+        "sales_motion_signal", "funding_pattern_index", "funding_pattern_model_status",
         "funding_probability_90d", "funding_model_status", "momentum_flag", "top_driver",
         "risk_flag", "commit_velocity_14d", "commit_velocity_change", "contributors",
         "contributor_growth", "new_repos_30d", "signal_type", "github_url",
         "website_url", "profile_url",
     ]
-    return filtered.head(limit)[cols].where(filtered[cols].notna(), None).to_dict(orient="records")
+    available = [column for column in cols if column in filtered.columns]
+    return filtered.head(limit)[available].where(filtered[available].notna(), None).to_dict(orient="records")
 
 
 @app.get("/startups/{startup_name}")
@@ -119,6 +133,7 @@ def watchlist_brief(names: str = Query(..., description="Comma-separated organis
         "count": len(reports),
         "missing": missing,
         "source_period": metadata.get("period"),
+        "commercial_signals": commercial_data_status(),
         "funding_pattern_model": historical_pattern_status(),
         "funding_model": model_status(),
         "reports": reports,
