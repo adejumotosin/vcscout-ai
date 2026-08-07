@@ -1,0 +1,2 @@
+startup_key,signal_period,funding_event_date,raised_funding_within_90d,round_type,amount_usd,source_url
+example,q3-2026,2026-09-15,1,Seed,5000000,https://example.com/source
