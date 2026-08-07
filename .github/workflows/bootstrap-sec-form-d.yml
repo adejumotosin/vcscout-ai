@@ -1,5 +1,5 @@
-# Temporary one-shot historical backtest pilot; remove after validation.
-name: Pilot historical funding backtest
+# Temporary one-shot full historical backtest; remove after validation.
+name: Full historical funding backtest
 
 on:
   push:
@@ -13,6 +13,7 @@ permissions:
 jobs:
   backtest:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,15 +23,20 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install dependencies
-        run: pip install -e '.[dev]'
-      - name: Reconstruct a 10-event GitHub pilot
+        run: pip install -e '.[dev,ml]'
+      - name: Reconstruct all validated funding windows
         env:
           GH_PUBLIC_TOKEN: ${{ github.token }}
-        run: python scripts/build_receipt_backtest.py --limit 10
-      - name: Commit pilot dataset and audit status
+        run: python scripts/build_receipt_backtest.py
+      - name: Evaluate grouped out-of-sample backtest
+        run: python scripts/evaluate_receipt_backtest.py
+      - name: Commit backtest dataset, predictions, report, and audit status
         run: |
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/training/receipt_backtest_features.csv data/workflow_status/receipt_backtest_build.csv
-          git commit -m "data: build receipt backtest pilot" || true
+          git add data/training/receipt_backtest_features.csv \
+                  data/training/receipt_backtest_predictions.csv \
+                  data/model/receipt_backtest_report.json \
+                  data/workflow_status/receipt_backtest_build.csv
+          git commit -m "data: complete historical funding backtest" || true
           git push
