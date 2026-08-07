@@ -1,5 +1,5 @@
-# Temporary one-shot full historical backtest; remove after validation.
-name: Full historical funding backtest
+# Temporary one-shot ranker export; remove after artifact is committed.
+name: Export historical funding pattern ranker
 
 on:
   push:
@@ -11,9 +11,8 @@ permissions:
   contents: write
 
 jobs:
-  backtest:
+  export:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,19 +23,14 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -e '.[dev,ml]'
-      - name: Reconstruct all validated funding windows
-        env:
-          GH_PUBLIC_TOKEN: ${{ github.token }}
-        run: python scripts/build_receipt_backtest.py
-      - name: Evaluate grouped out-of-sample backtest
+      - name: Evaluate and export portable ranker
         run: python scripts/evaluate_receipt_backtest.py
-      - name: Commit backtest dataset, predictions, report, and audit status
+      - name: Commit ranker artifact and refreshed report
         run: |
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/training/receipt_backtest_features.csv \
-                  data/training/receipt_backtest_predictions.csv \
+          git add data/model/funding_pattern_ranker.json \
                   data/model/receipt_backtest_report.json \
-                  data/workflow_status/receipt_backtest_build.csv
-          git commit -m "data: complete historical funding backtest" || true
+                  data/training/receipt_backtest_predictions.csv
+          git commit -m "model: export historical funding pattern ranker" || true
           git push
