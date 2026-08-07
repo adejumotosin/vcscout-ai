@@ -1,3 +1,4 @@
+# One-shot bootstrap; remove after successful historical coverage backfill.
 name: Bootstrap complete SEC outcome coverage
 
 on:
