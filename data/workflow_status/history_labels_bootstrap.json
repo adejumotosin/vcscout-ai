@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "detail": "history_and_labels_built",
+  "model_status": "safety_gate_not_satisfied_or_training_failed",
+  "recorded_at": "2026-08-07T01:28:15.170735+00:00",
+  "history_log_tail": "Imported 219 historical startup-period rows; store now contains 215 rows.\n",
+  "labels_log_tail": "Wrote 215 uncensored labels with 0 positive funding events to /home/runner/work/vcscout-ai/vcscout-ai/data/training/funding_labels.csv.\n",
+  "model_log_tail": "Safety gate failed: need >=50 labelled rows and >=10 positive events; found 215 rows/0 positives.\n"
+}
