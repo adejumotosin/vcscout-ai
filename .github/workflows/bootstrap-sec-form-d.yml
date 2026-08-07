@@ -1,4 +1,4 @@
-name: Bootstrap SEC Form D Q2
+name: Bootstrap VCScout historical labels
 
 on:
   push:
@@ -22,29 +22,22 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -e '.[dev,ml]'
-      - name: Ingest, label, train, and record status
-        env:
-          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+      - name: Backfill history, build labels, train when eligible, and record status
         shell: bash
         run: |
           set +e
           mkdir -p data/workflow_status
           STATUS="success"
-          DETAIL="sec_form_d_2026_q2_ingested"
+          DETAIL="history_and_labels_built"
 
-          if [ -z "$SEC_USER_AGENT" ]; then
+          python scripts/import_gitdealflow_history.py > /tmp/history.log 2>&1
+          HISTORY_CODE=$?
+          if [ "$HISTORY_CODE" -ne 0 ]; then
             STATUS="failed"
-            DETAIL="SEC_USER_AGENT_secret_missing_or_empty"
-          else
-            python scripts/ingest_sec_form_d.py --year 2026 --quarter 2 --user-agent "$SEC_USER_AGENT" > /tmp/sec_ingest.log 2>&1
-            INGEST_CODE=$?
-            if [ "$INGEST_CODE" -ne 0 ]; then
-              STATUS="failed"
-              DETAIL="ingest_script_failed"
-            fi
+            DETAIL="history_import_failed"
           fi
 
-          if [ "$STATUS" = "success" ] && [ -f data/history/signals_history.csv ]; then
+          if [ "$STATUS" = "success" ]; then
             python scripts/build_funding_labels.py > /tmp/labels.log 2>&1
             LABEL_CODE=$?
             if [ "$LABEL_CODE" -ne 0 ]; then
@@ -70,34 +63,32 @@ jobs:
           from datetime import datetime, timezone
           from pathlib import Path
 
-          def tail(path, limit=1400):
+          def tail(path, limit=2200):
               p = Path(path)
               if not p.exists():
                   return None
-              text = p.read_text(errors="replace")
-              return text[-limit:]
+              return p.read_text(errors="replace")[-limit:]
 
           payload = {
               "status": os.environ.get("STATUS"),
               "detail": os.environ.get("DETAIL"),
               "model_status": os.environ.get("MODEL_STATUS"),
-              "period": "2026Q2",
               "recorded_at": datetime.now(timezone.utc).isoformat(),
-              "ingest_log_tail": tail("/tmp/sec_ingest.log"),
+              "history_log_tail": tail("/tmp/history.log"),
               "labels_log_tail": tail("/tmp/labels.log"),
               "model_log_tail": tail("/tmp/model.log"),
           }
           Path("data/workflow_status").mkdir(parents=True, exist_ok=True)
-          Path("data/workflow_status/sec_form_d_2026_q2.json").write_text(json.dumps(payload, indent=2))
+          Path("data/workflow_status/history_labels_bootstrap.json").write_text(json.dumps(payload, indent=2))
           PY
 
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/
-          git commit -m "data: record SEC Form D 2026 Q2 bootstrap" || true
+          git commit -m "data: backfill VCScout history and funding labels" || true
           git push
 
           if [ "$STATUS" != "success" ]; then
-            echo "SEC bootstrap failed: $DETAIL"
+            echo "VCScout history bootstrap failed: $DETAIL"
             exit 1
           fi
