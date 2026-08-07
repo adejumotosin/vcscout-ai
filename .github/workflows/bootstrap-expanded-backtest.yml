@@ -23,21 +23,53 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -e '.[dev,ml]'
-      - name: Reconstruct expanded historical signal windows
+      - name: Run benchmark and persist status
         env:
           GH_PUBLIC_TOKEN: ${{ github.token }}
-        run: python scripts/build_receipt_backtest.py
-      - name: Compare engineering-only and expanded models
-        run: python scripts/evaluate_receipt_backtest.py
-      - name: Commit benchmark artifacts
+        shell: bash
         run: |
+          set +e
+          mkdir -p data/workflow_status
+          python scripts/build_receipt_backtest.py > /tmp/expanded-build.log 2>&1
+          BUILD_CODE=$?
+          EVAL_CODE=99
+          if [ "$BUILD_CODE" -eq 0 ]; then
+            python scripts/evaluate_receipt_backtest.py > /tmp/expanded-eval.log 2>&1
+            EVAL_CODE=$?
+          fi
+          export BUILD_CODE EVAL_CODE
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          def tail(path, n=5000):
+              p = Path(path)
+              return p.read_text(errors="replace")[-n:] if p.exists() else None
+
+          payload = {
+              "status": "success" if os.environ["BUILD_CODE"] == "0" and os.environ["EVAL_CODE"] == "0" else "failed",
+              "build_exit_code": int(os.environ["BUILD_CODE"]),
+              "evaluation_exit_code": int(os.environ["EVAL_CODE"]),
+              "recorded_at": datetime.now(timezone.utc).isoformat(),
+              "build_log_tail": tail("/tmp/expanded-build.log"),
+              "evaluation_log_tail": tail("/tmp/expanded-eval.log"),
+          }
+          Path("data/workflow_status/expanded_backtest_status.json").write_text(json.dumps(payload, indent=2))
+          PY
+
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/training/receipt_backtest_features.csv \
                   data/training/receipt_backtest_predictions.csv \
                   data/model/receipt_backtest_report.json \
                   data/model/funding_pattern_ranker.json \
-                  data/workflow_status/receipt_backtest_build.csv
+                  data/workflow_status/receipt_backtest_build.csv \
+                  data/workflow_status/expanded_backtest_status.json 2>/dev/null || true
           git commit -m "data: benchmark expanded historical signal model" || true
           git pull --rebase origin main
           git push
+
+          if [ "$BUILD_CODE" -ne 0 ] || [ "$EVAL_CODE" -ne 0 ]; then
+            exit 1
+          fi
