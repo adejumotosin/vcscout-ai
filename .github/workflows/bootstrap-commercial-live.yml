@@ -1,4 +1,4 @@
-# Temporary one-shot live commercial snapshot; remove after the first dataset is committed.
+# Temporary one-shot live commercial snapshot; remove after the full dataset is committed.
 name: Bootstrap live commercial signals
 
 on:
@@ -24,12 +24,12 @@ jobs:
           cache: pip
       - run: pip install -e '.[dev]'
       - run: pytest -q
-      - name: Snapshot live company websites
-        run: python scripts/snapshot_commercial_signals.py --limit 100 --workers 10 --timeout 10
+      - name: Snapshot full live company universe
+        run: python scripts/snapshot_commercial_signals.py --workers 12 --timeout 8
       - name: Commit live commercial signals
         run: |
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/commercial/live_commercial_signals.csv data/workflow_status/commercial_live_snapshot.csv
-          git commit -m "data: snapshot live commercial maturity signals" || true
+          git commit -m "data: rebuild full commercial maturity universe" || true
           git push
