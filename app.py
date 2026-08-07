@@ -23,11 +23,11 @@ def _dashboard_html() -> str:
     )
     html = html.replace(
         '<th>#</th><th>Company</th><th>Scout</th><th>Funding 90d</th>',
-        '<th>#</th><th>Company</th><th>Scout</th><th>Commercial</th><th>Pattern</th><th>Funding 90d</th>',
+        '<th>#</th><th>Company</th><th>Scout</th><th>Commercial maturity</th><th>Pattern</th><th>Funding 90d</th>',
     )
     html = html.replace(
         'function probabilityCell(x){',
-        'function commercialCell(x){return Number.isFinite(Number(x.commercial_momentum_score))?`<span class="score">${Number(x.commercial_momentum_score).toFixed(1)}</span>`:`<span class="pending">n/a</span>`}\nfunction patternCell(x){return Number.isFinite(Number(x.funding_pattern_index))?`<span class="prob">${Number(x.funding_pattern_index).toFixed(1)}</span>`:`<span class="pending">n/a</span>`}\nfunction probabilityCell(x){',
+        'function commercialCell(x){const v=x.commercial_maturity_score??x.commercial_momentum_score;return Number.isFinite(Number(v))?`<span class="score">${Number(v).toFixed(1)}</span>`:`<span class="pending">n/a</span>`}\nfunction patternCell(x){return Number.isFinite(Number(x.funding_pattern_index))?`<span class="prob">${Number(x.funding_pattern_index).toFixed(1)}</span>`:`<span class="pending">n/a</span>`}\nfunction probabilityCell(x){',
     )
     html = html.replace(
         '<td class="score">${Number(x.vc_scout_score).toFixed(1)}</td><td>${probabilityCell(x)}</td>',
@@ -35,11 +35,11 @@ def _dashboard_html() -> str:
     )
     html = html.replace(
         "const x=selected,isWatched=watch.has(x.name),prob=Number.isFinite(Number(x.funding_probability_90d))?`${Number(x.funding_probability_90d).toFixed(1)}%`:'Pending';",
-        "const x=selected,isWatched=watch.has(x.name),prob=Number.isFinite(Number(x.funding_probability_90d))?`${Number(x.funding_probability_90d).toFixed(1)}%`:'Pending',commercial=Number.isFinite(Number(x.commercial_momentum_score))?Number(x.commercial_momentum_score).toFixed(1):'n/a',pattern=Number.isFinite(Number(x.funding_pattern_index))?Number(x.funding_pattern_index).toFixed(1):'n/a';",
+        "const x=selected,isWatched=watch.has(x.name),prob=Number.isFinite(Number(x.funding_probability_90d))?`${Number(x.funding_probability_90d).toFixed(1)}%`:'Pending',commercialValue=x.commercial_maturity_score??x.commercial_momentum_score,commercial=Number.isFinite(Number(commercialValue))?Number(commercialValue).toFixed(1):'n/a',pattern=Number.isFinite(Number(x.funding_pattern_index))?Number(x.funding_pattern_index).toFixed(1):'n/a';",
     )
     html = html.replace(
         '<div class="score-row"><div class="scorebox"><span>VC Scout Score</span><strong class="green">${Number(x.vc_scout_score).toFixed(1)}</strong></div><div class="scorebox"><span>Funding probability · 90d</span><strong class="blue">${prob}</strong></div></div>',
-        '<div class="score-row"><div class="scorebox"><span>VC Scout Score</span><strong class="green">${Number(x.vc_scout_score).toFixed(1)}</strong></div><div class="scorebox"><span>Commercial Momentum</span><strong>${commercial}</strong></div><div class="scorebox"><span>Funding Pattern Index</span><strong class="blue">${pattern}</strong></div><div class="scorebox"><span>Funding probability · 90d</span><strong class="blue">${prob}</strong></div></div>',
+        '<div class="score-row"><div class="scorebox"><span>VC Scout Score</span><strong class="green">${Number(x.vc_scout_score).toFixed(1)}</strong></div><div class="scorebox"><span>Commercial Maturity</span><strong>${commercial}</strong></div><div class="scorebox"><span>Funding Pattern Index</span><strong class="blue">${pattern}</strong></div><div class="scorebox"><span>Funding probability · 90d</span><strong class="blue">${prob}</strong></div></div>',
     )
     html = html.replace('colspan="9"', 'colspan="11"')
     return html
