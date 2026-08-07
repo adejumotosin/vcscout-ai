@@ -1,5 +1,5 @@
-# Temporary one-shot archived commercial-signal pilot; remove after validation.
-name: Pilot archived commercial backtest
+# Temporary one-shot commercial-signal pilot; remove after validation.
+name: Pilot commercial signals
 
 on:
   push:
@@ -10,10 +10,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: vcscout-commercial-pilot
+  cancel-in-progress: true
+
 jobs:
   commercial-pilot:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,14 +30,19 @@ jobs:
         run: pip install -e '.[dev]'
       - name: Run tests
         run: pytest -q
-      - name: Build 12-company archived commercial pilot
+      - name: Build 6-company archived commercial pilot
         env:
           GH_PUBLIC_TOKEN: ${{ github.token }}
-        run: python scripts/build_commercial_backtest.py --limit 12 --max-capture-age-days 120
+        run: python scripts/build_commercial_backtest.py --limit 6 --max-capture-age-days 120
+      - name: Snapshot 60 live company websites
+        run: python scripts/snapshot_commercial_signals.py --limit 60 --workers 8 --timeout 12
       - name: Commit pilot data and audit
         run: |
           git config user.name "vcscout-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/training/commercial_backtest_features.csv data/workflow_status/commercial_backtest_build.csv
-          git commit -m "data: pilot archived commercial signals" || true
+          git add data/training/commercial_backtest_features.csv \
+                  data/workflow_status/commercial_backtest_build.csv \
+                  data/commercial/live_commercial_signals.csv \
+                  data/workflow_status/commercial_live_snapshot.csv
+          git commit -m "data: pilot commercial signal layer" || true
           git push
