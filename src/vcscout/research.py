@@ -18,14 +18,22 @@ def _signed(value: Any) -> str:
         return "n/a"
 
 
+def _finite(value: Any) -> bool:
+    if value is None:
+        return False
+    try:
+        number = float(value)
+        return number == number
+    except (TypeError, ValueError):
+        return False
+
+
 def build_research_report(row: Mapping[str, Any]) -> dict[str, Any]:
     score = float(row.get("vc_scout_score") or 0.0)
     probability = row.get("funding_probability_90d")
-    probability_available = probability is not None
-    try:
-        probability_available = probability_available and float(probability) == float(probability)
-    except (TypeError, ValueError):
-        probability_available = False
+    probability_available = _finite(probability)
+    pattern_index = row.get("funding_pattern_index")
+    pattern_available = _finite(pattern_index)
 
     commit_change = float(row.get("commit_velocity_change") or 0.0)
     contributor_growth = float(row.get("contributor_growth") or 0.0)
@@ -41,6 +49,10 @@ def build_research_report(row: Mapping[str, Any]) -> dict[str, Any]:
         positives.append(f"The organisation created {_n(new_repos)} public repositories in the last 30 days.")
     if contributors >= 10:
         positives.append(f"The observed public engineering surface includes approximately {_n(contributors)} contributors.")
+    if pattern_available:
+        positives.append(
+            f"Its Historical Funding Pattern Index is {float(pattern_index):.1f}/100, meaning its current public-engineering pattern ranks near the {float(pattern_index):.0f}th percentile of the live comparison universe under VCScout's historical case-control ranker."
+        )
     if not positives:
         positives.append("The company is ranked primarily by its relative position within the current VCScout universe rather than one dominant breakout metric.")
 
@@ -52,8 +64,10 @@ def build_research_report(row: Mapping[str, Any]) -> dict[str, Any]:
     if not row.get("website_url"):
         risks.append("No company website is attached to the source record; entity verification is required.")
     risks.append("Public GitHub activity can understate teams that build mainly in private repositories and can overstate momentum around open-source launches.")
+    if pattern_available:
+        risks.append("The Historical Funding Pattern Index is a relative ranking from a matched historical case-control backtest; it is not a calibrated probability or evidence that a financing event will occur.")
     if not probability_available:
-        risks.append("VCScout is withholding a funding probability until the outcome model passes the minimum labelled-sample and temporal-validation gates.")
+        risks.append("VCScout is withholding a 90-day funding probability until a prospective outcome model has sufficient population-calibrated labels and temporal validation.")
 
     questions = [
         "What product or release explains the engineering acceleration, and is it tied to customer demand?",
@@ -68,16 +82,19 @@ def build_research_report(row: Mapping[str, Any]) -> dict[str, Any]:
         f"{row.get('sector') or 'company'} with a VC Scout Score of {score:.1f}/100. "
         f"Its current signal is {row.get('signal_type') or 'unclassified'}, led by {str(row.get('top_driver') or 'relative engineering momentum').lower()}."
     )
+    if pattern_available:
+        thesis += f" Its Historical Funding Pattern Index is {float(pattern_index):.1f}/100, a relative historical-pattern percentile rather than a probability."
     if probability_available:
-        thesis += f" The validated model estimates a {float(probability):.1f}% probability of a funding event within 90 days."
+        thesis += f" The prospectively validated model estimates a {float(probability):.1f}% probability of a funding event within 90 days."
     else:
-        thesis += " A funding-event probability is intentionally not shown because the validated outcome model is not yet available."
+        thesis += " A true 90-day funding-event probability is intentionally not shown because the prospective outcome model is not yet validated."
 
     return {
         "name": row.get("name"),
-        "generated_from": "VCScout public engineering signals",
+        "generated_from": "VCScout public engineering signals and historical funding-pattern validation",
         "thesis": thesis,
         "score": score,
+        "funding_pattern_index": float(pattern_index) if pattern_available else None,
         "funding_probability_90d": float(probability) if probability_available else None,
         "signal": row.get("signal_type"),
         "momentum": row.get("momentum_flag"),
@@ -94,7 +111,9 @@ def build_research_report(row: Mapping[str, Any]) -> dict[str, Any]:
 
 def research_report_markdown(report: Mapping[str, Any]) -> str:
     probability = report.get("funding_probability_90d")
-    probability_text = f"{float(probability):.1f}%" if probability is not None else "Withheld pending validated outcome model"
+    probability_text = f"{float(probability):.1f}%" if probability is not None else "Withheld pending prospectively validated outcome model"
+    pattern = report.get("funding_pattern_index")
+    pattern_text = f"{float(pattern):.1f}/100 percentile index" if pattern is not None else "Unavailable"
     evidence = "\n".join(f"- {item}" for item in report.get("evidence", []))
     risks = "\n".join(f"- {item}" for item in report.get("risks", []))
     questions = "\n".join(f"- {item}" for item in report.get("diligence_questions", []))
@@ -107,6 +126,7 @@ def research_report_markdown(report: Mapping[str, Any]) -> str:
 
 ## Signal snapshot
 - VC Scout Score: {float(report.get('score') or 0):.1f}/100
+- Historical Funding Pattern Index: {pattern_text}
 - Funding probability (90d): {probability_text}
 - Signal: {report.get('signal') or 'n/a'}
 - Momentum: {report.get('momentum') or 'n/a'}
@@ -124,5 +144,5 @@ def research_report_markdown(report: Mapping[str, Any]) -> str:
 {link_lines or '- No source links available.'}
 
 ---
-Generated from public VCScout engineering signals. This memo is for research prioritisation, not investment advice.
+Generated from public VCScout engineering signals. The Historical Funding Pattern Index is a relative ranking from a matched historical backtest and is not a funding probability. This memo is for research prioritisation, not investment advice.
 """
