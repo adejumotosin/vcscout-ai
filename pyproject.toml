@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vcscout-ai"
-version = "0.2.0"
-description = "Alternative-data venture sourcing engine using public GitHub engineering signals"
+version = "0.3.0"
+description = "Alternative-data venture intelligence engine using public engineering signals and validated funding outcomes"
 requires-python = ">=3.11"
 dependencies = [
   "pandas>=2.2,<3",
