@@ -4,7 +4,6 @@ import re
 from dataclasses import dataclass
 from datetime import timedelta
 from difflib import SequenceMatcher
-from typing import Iterable
 
 import pandas as pd
 
@@ -36,6 +35,7 @@ def conservative_name_match(left: str, right: str, threshold: float = 0.94) -> b
 class LabelConfig:
     horizon_days: int = 90
     fuzzy_threshold: float = 0.94
+    reporting_lag_days: int = 20
 
 
 def _alias_lookup(aliases: pd.DataFrame | None) -> dict[str, str]:
@@ -51,6 +51,16 @@ def _alias_lookup(aliases: pd.DataFrame | None) -> dict[str, str]:
     }
 
 
+def _build_prefix_index(names: list[str], width: int = 3) -> dict[str, list[str]]:
+    index: dict[str, list[str]] = {}
+    for name in names:
+        if not name:
+            continue
+        key = name[:width]
+        index.setdefault(key, []).append(name)
+    return index
+
+
 def build_90d_labels(
     signals: pd.DataFrame,
     events: pd.DataFrame,
@@ -59,12 +69,12 @@ def build_90d_labels(
     aliases: pd.DataFrame | None = None,
     config: LabelConfig = LabelConfig(),
 ) -> pd.DataFrame:
-    """Create leakage-resistant 90-day labels from timestamped funding events.
+    """Create leakage-resistant labels from timestamped funding events.
 
-    A signal observation is positive when a matched funding event occurs strictly after
-    the observation and on/before the horizon. It is negative only when the full
-    horizon has elapsed by ``as_of``. More recent observations are right-censored and
-    excluded from training.
+    A signal is positive when a matched funding event occurs strictly after the signal
+    and on/before the prediction horizon. A negative is emitted only after both the
+    prediction horizon and a reporting-lag buffer have elapsed. The lag is important
+    for sources such as SEC Form D where a filing can arrive after the first sale.
     """
     required_signals = {"name", "snapshot_date"}
     required_events = {"issuer_name", "event_date"}
@@ -89,24 +99,42 @@ def build_90d_labels(
         events_by_name.setdefault(row["normalized_issuer"], []).append(row)
 
     all_event_names = [name for name in events_by_name if name]
+    prefix_index = _build_prefix_index(all_event_names)
+    match_cache: dict[str, tuple[str | None, str | None]] = {}
+
+    def resolve_candidate(mapped: str) -> tuple[str | None, str | None]:
+        if not mapped:
+            return None, None
+        if mapped in match_cache:
+            return match_cache[mapped]
+        if mapped in events_by_name:
+            result = (mapped, "exact")
+            match_cache[mapped] = result
+            return result
+
+        candidates = prefix_index.get(mapped[:3], []) if len(mapped) >= 3 else all_event_names
+        best_name, best_score = None, 0.0
+        for event_name in candidates:
+            if min(len(mapped), len(event_name)) < 5:
+                continue
+            score = SequenceMatcher(None, mapped, event_name).ratio()
+            if score > best_score:
+                best_name, best_score = event_name, score
+        if best_name and best_score >= config.fuzzy_threshold:
+            result = (best_name, f"fuzzy:{best_score:.3f}")
+        else:
+            result = (None, None)
+        match_cache[mapped] = result
+        return result
+
     output: list[dict] = []
     horizon = timedelta(days=config.horizon_days)
+    reporting_lag = timedelta(days=config.reporting_lag_days)
 
     for _, row in sig.iterrows():
         signal_name = row["normalized_name"]
         mapped = alias_map.get(signal_name, signal_name)
-        candidate_name = mapped if mapped in events_by_name else None
-        match_method = "exact" if candidate_name else None
-
-        if candidate_name is None and mapped:
-            best_name, best_score = None, 0.0
-            for event_name in all_event_names:
-                score = SequenceMatcher(None, mapped, event_name).ratio()
-                if score > best_score:
-                    best_name, best_score = event_name, score
-            if best_name and best_score >= config.fuzzy_threshold and min(len(mapped), len(best_name)) >= 5:
-                candidate_name = best_name
-                match_method = f"fuzzy:{best_score:.3f}"
+        candidate_name, match_method = resolve_candidate(mapped)
 
         start = row["snapshot_date"]
         end = start + horizon
@@ -129,7 +157,7 @@ def build_90d_labels(
             labelled["funding_event_date"] = matched_event["event_date"]
             labelled["funding_amount"] = matched_event.get("amount_sold")
             labelled["funding_source"] = matched_event.get("source", "unknown")
-        elif end <= as_of_ts:
+        elif end + reporting_lag <= as_of_ts:
             labelled["raised_funding_within_90d"] = 0
 
         output.append(labelled)
