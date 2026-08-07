@@ -109,6 +109,41 @@
     "roc_auc": 0.4946,
     "average_precision": 0.5393
   },
+  "model_selection": {
+    "promote": false,
+    "selected_model": "incumbent",
+    "reason": "No challenger cleared the material lift and live-compatibility gates.",
+    "policy": {
+      "minimum_auc_lift": 0.02,
+      "minimum_average_precision_lift": 0.01,
+      "requires_both": true,
+      "requires_live_feature_compatibility": true
+    },
+    "incumbent": {
+      "roc_auc": 0.6252,
+      "average_precision": 0.6583
+    },
+    "candidates": {
+      "engineering_only": {
+        "roc_auc": 0.6261,
+        "average_precision": 0.6585,
+        "auc_lift_vs_incumbent": 0.0009,
+        "ap_lift_vs_incumbent": 0.0002,
+        "live_compatible": true,
+        "passes_material_lift": false,
+        "promotion_eligible": false
+      },
+      "engineering_product_community": {
+        "roc_auc": 0.6274,
+        "average_precision": 0.6321,
+        "auc_lift_vs_incumbent": 0.0022,
+        "ap_lift_vs_incumbent": -0.0262,
+        "live_compatible": false,
+        "passes_material_lift": false,
+        "promotion_eligible": false
+      }
+    }
+  },
   "paired_signal_summary": {
     "commit_velocity_14d": {
       "pairs": 48,
@@ -191,8 +226,8 @@
       "ties": 3
     }
   },
-  "historical_pattern_ranker_exported": true,
-  "ranker_version": 2,
+  "historical_pattern_ranker_available": true,
+  "production_ranker_action": "retained_incumbent",
   "probability_calibrated": false,
   "production_probability_eligible": false,
   "caveats": [
