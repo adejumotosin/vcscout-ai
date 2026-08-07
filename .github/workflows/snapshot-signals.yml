@@ -1,0 +1,36 @@
+name: Snapshot VCScout signals
+
+on:
+  schedule:
+    - cron: "20 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install runtime dependencies
+        run: pip install -r requirements.txt
+      - name: Snapshot current signal universe
+        run: python scripts/snapshot_signals.py
+      - name: Commit snapshot when data changed
+        run: |
+          if git diff --quiet -- data/history/signals_history.csv; then
+            echo "No signal-history changes to commit."
+            exit 0
+          fi
+          git config user.name "vcscout-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/history/signals_history.csv
+          git commit -m "data: snapshot weekly VCScout signals"
+          git push
