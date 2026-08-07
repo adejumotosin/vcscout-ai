@@ -5,6 +5,7 @@ from functools import lru_cache
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Mapping
+from urllib.parse import urlparse
 
 import numpy as np
 import pandas as pd
@@ -48,10 +49,11 @@ SIGNAL_WEIGHTS: dict[str, float] = {
     "sales_motion_signal": 6.0,
 }
 
+# Terms are intentionally oriented toward visible go-to-market infrastructure. Broad
+# words that appear on almost every corporate/legal page are avoided where practical.
 _PATTERNS: dict[str, tuple[str, ...]] = {
     "pricing_signal": ("pricing", "/pricing", "plans and pricing"),
     "customer_evidence_signal": (
-        "customers",
         "customer stories",
         "case studies",
         "case study",
@@ -60,25 +62,55 @@ _PATTERNS: dict[str, tuple[str, ...]] = {
         "/case-studies",
         "/case_studies",
     ),
-    "enterprise_signal": ("enterprise", "/enterprise", "for enterprise"),
-    "careers_signal": ("careers", "jobs", "we're hiring", "we are hiring", "join our team", "/careers", "/jobs"),
+    "enterprise_signal": ("for enterprise", "enterprise plan", "enterprise customers", "/enterprise"),
+    "careers_signal": ("we're hiring", "we are hiring", "join our team", "/careers", "/jobs"),
     "security_signal": (
         "soc 2",
         "soc2",
         "iso 27001",
         "trust center",
-        "security",
-        "gdpr",
+        "security center",
         "/security",
         "/trust",
     ),
     "integrations_signal": ("integrations", "marketplace", "/integrations", "/marketplace"),
-    "developer_docs_signal": ("documentation", "developer docs", "api reference", "/docs", "/developers"),
-    "self_serve_signal": ("start free", "free trial", "sign up", "signup", "get started", "try for free"),
+    "developer_docs_signal": ("developer docs", "api reference", "/docs", "/developers"),
+    "self_serve_signal": ("start free", "free trial", "sign up", "signup", "try for free"),
     "sales_motion_signal": ("contact sales", "talk to sales", "book a demo", "request a demo", "schedule a demo"),
 }
 
+_BLOCKED_WEBSITE_HOSTS = {
+    "github.com",
+    "gitlab.com",
+    "bitbucket.org",
+    "twitter.com",
+    "x.com",
+    "linkedin.com",
+    "facebook.com",
+    "instagram.com",
+    "youtube.com",
+    "discord.com",
+    "discord.gg",
+}
+
 LIVE_SIGNALS_PATH = Path(__file__).resolve().parents[2] / "data" / "commercial" / "live_commercial_signals.csv"
+
+
+def is_company_website_url(value: Any) -> bool:
+    """Reject source/social/code-host URLs that should not be scored as company websites."""
+    raw = str(value or "").strip()
+    if not raw:
+        return False
+    if not raw.startswith(("http://", "https://")):
+        raw = "https://" + raw.lstrip("/")
+    try:
+        host = (urlparse(raw).hostname or "").lower().strip(".")
+    except ValueError:
+        return False
+    if not host:
+        return False
+    host = host[4:] if host.startswith("www.") else host
+    return not any(host == blocked or host.endswith("." + blocked) for blocked in _BLOCKED_WEBSITE_HOSTS)
 
 
 def extract_commercial_signals(html: str | bytes | None) -> dict[str, float]:
