@@ -11,10 +11,6 @@ on:
         description: "Quarter (1-4)"
         required: true
         default: "2"
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/ingest-sec-form-d.yml"
 
 permissions:
   contents: write
@@ -39,27 +35,19 @@ jobs:
             echo "Create repository secret SEC_USER_AGENT with a descriptive SEC-compliant identity string."
             exit 1
           fi
-      - name: Resolve ingestion period
-        id: period
-        env:
-          INPUT_YEAR: ${{ inputs.year }}
-          INPUT_QUARTER: ${{ inputs.quarter }}
-        run: |
-          echo "year=${INPUT_YEAR:-2026}" >> "$GITHUB_OUTPUT"
-          echo "quarter=${INPUT_QUARTER:-2}" >> "$GITHUB_OUTPUT"
       - name: Ingest SEC quarter
         env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
-        run: python scripts/ingest_sec_form_d.py --year "${{ steps.period.outputs.year }}" --quarter "${{ steps.period.outputs.quarter }}" --user-agent "$SEC_USER_AGENT"
+        run: python scripts/ingest_sec_form_d.py --year "${{ inputs.year }}" --quarter "${{ inputs.quarter }}" --user-agent "$SEC_USER_AGENT"
       - name: Rebuild labels when history exists
         run: |
           if [ -f data/history/signals_history.csv ]; then
             python scripts/build_funding_labels.py
           fi
-      - name: Train model when safety gates pass
+      - name: Train probability model only when safety gates pass
         run: |
           if [ -f data/training/funding_labels.csv ]; then
-            python scripts/train_funding_model.py || echo "Model safety gate not yet satisfied; labels were still saved."
+            python scripts/train_funding_model.py || echo "Prospective probability-model safety gate not yet satisfied; labels were still saved."
           fi
       - name: Commit outcome data and model changes
         run: |
