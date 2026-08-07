@@ -1,4 +1,4 @@
-# One-shot bootstrap; remove after successful historical coverage backfill.
+# One-shot optimized retry; remove after successful historical coverage backfill.
 name: Bootstrap complete SEC outcome coverage
 
 on:
@@ -54,7 +54,7 @@ jobs:
           fi
 
           if [ "$STATUS" = "success" ]; then
-            python scripts/build_funding_labels.py --as-of 2026-06-30 > /tmp/labels.log 2>&1
+            python scripts/build_funding_labels.py > /tmp/labels.log 2>&1
             LABEL_CODE=$?
             if [ "$LABEL_CODE" -ne 0 ]; then
               STATUS="failed"
@@ -88,7 +88,6 @@ jobs:
               "detail": os.environ.get("DETAIL"),
               "model_status": os.environ.get("MODEL_STATUS"),
               "coverage": ["2025Q3", "2025Q4", "2026Q1", "2026Q2"],
-              "label_as_of": "2026-06-30",
               "recorded_at": datetime.now(timezone.utc).isoformat(),
               "sec_log_tail": tail("/tmp/sec_backfill.log"),
               "labels_log_tail": tail("/tmp/labels.log"),
